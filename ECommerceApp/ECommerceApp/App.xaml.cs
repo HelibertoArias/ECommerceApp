@@ -9,11 +9,13 @@ namespace ECommerceApp
 {
     public partial class App : Application
     {
+        public static NavigationPage Navitagor { get; internal set; }
+
         public App()
         {
             InitializeComponent();
 
-            MainPage = new ECommerceApp.MainPage();
+            MainPage = new ECommerceApp.Pages.MasterPage();
         }
 
         protected override void OnStart()

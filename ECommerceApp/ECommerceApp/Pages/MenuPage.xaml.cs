@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Xamarin.Forms;
 
-namespace ECommerceApp
+namespace ECommerceApp.Pages
 {
-    public partial class MainPage : ContentPage
+    public partial class MenuPage : ContentPage
     {
-        public MainPage()
+        public MenuPage()
         {
             InitializeComponent();
         }
