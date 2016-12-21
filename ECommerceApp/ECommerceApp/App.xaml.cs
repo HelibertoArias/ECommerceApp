@@ -11,9 +11,12 @@ namespace ECommerceApp
 {
     public partial class App : Application
     {
+        #region Attributes
+
         public static NavigationPage Navigator { get; internal set; }
 
-        public static MasterPage Master { get; internal set; }
+        public static MasterPage Master { get; internal set; } 
+        #endregion
 
         public App()
         {
@@ -21,6 +24,7 @@ namespace ECommerceApp
 
             MainPage = new ECommerceApp.Pages.MasterPage();
         }
+        #region Methods
 
         protected override void OnStart()
         {
@@ -35,6 +39,7 @@ namespace ECommerceApp
         protected override void OnResume()
         {
             // Handle when your app resumes
-        }
+        } 
+        #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace ECommerceApp.Services
     {
         public async Task Navigate(string pageName)
         {
-            App.Master.IsPresented = false;
+            App.Master.IsPresented = false; /*Oculta el menú lateral al seleccionar*/
             switch (pageName)
             {
                 case "CustormerPage":
