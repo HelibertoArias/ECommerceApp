@@ -10,9 +10,10 @@
   <StackLayout Padding="8">
     <StackLayout Orientation="Horizontal">
       <Label
-        Text="App Logs"
+        Text="E-Commerce"
         TextColor="{StaticResource AccentColor}"
         FontSize="24"
+        FontAttributes="Bold"
         HorizontalOptions="StartAndExpand"
         VerticalOptions="Center"/>
       <Image Source="ic_launcher.png"
@@ -33,6 +34,10 @@
         <DataTemplate>
           <ViewCell>
             <Grid>
+              <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding NavigateCommand}"/>
+              </Grid.GestureRecognizers>
+              
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>

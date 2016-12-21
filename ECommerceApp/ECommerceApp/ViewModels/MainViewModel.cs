@@ -25,8 +25,7 @@ namespace ECommerceApp.ViewModels
         #region Methods
 
         private void LoadMenu()
-        {
- 
+        { 
             AddItem("ic_action_product.png", "ProductsPage", "Productos");
             AddItem("ic_action_customer.png", "CustomersPage", "Clientes");
             AddItem("ic_action_order.png", "OrdersPage", "Pedidos");
@@ -34,12 +33,11 @@ namespace ECommerceApp.ViewModels
             AddItem("ic_action_sync.png", "SyncPage", "Sincronizar");
             AddItem("ic_action_setup.png", "SetupPage", "Configuración");
             AddItem("ic_action_logout.png", "Logout", "Salir");
-
         }
 
-        private void AddItem(string icon, string viewName, string title)
+        private void AddItem(string icon, string pageName, string title)
         {
-            Menu.Add(new MenuItemViewModel(icon, viewName, title));
+            Menu.Add(new MenuItemViewModel { Icon = icon, PageName = pageName, Title = title });
         }
         #endregion
     }

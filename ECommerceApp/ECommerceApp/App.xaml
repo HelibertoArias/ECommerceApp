@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:infra="clr-namespace:ECommerceApp.Infrastructure; assembly=ECommerceApp"
-         
+             xmlns:infra="clr-namespace:ECommerceApp.Infrastructure; assembly=ECommerceApp"         
              x:Class="ECommerceApp.App">
   <Application.Resources>
     <ResourceDictionary>
@@ -18,7 +17,7 @@
       <!--Crea la instancia del Menu : Start-->
       <infra:InstanceLocator x:Key="Locator"></infra:InstanceLocator>
       <!--Crea la instancia del Menu : End-->
-      
+
     </ResourceDictionary>
   </Application.Resources>
 </Application>

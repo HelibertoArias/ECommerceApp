@@ -2,10 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ECommerceApp.Pages.UserPage"
-             Title="ECommerce App"
-             BackgroundColor ="{StaticResource BackgroundColor}">
-  <Label Text="User page"
-         VerticalOptions="Center"
-         HorizontalOptions="Center"
-         TextColor="{StaticResource FontColor}"/>
+             Title="User page"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             BindingContext="{Binding Main, Source={StaticResource Locator} }">
+  <Label
+    Text="Users Page"
+    VerticalOptions="Center"
+    HorizontalOptions="Center"
+    TextColor="{StaticResource FontColor}"/>
 </ContentPage>

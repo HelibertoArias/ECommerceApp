@@ -18,7 +18,9 @@ namespace ECommerceApp.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            App.Navitagor = Navigator;
+            App.Navigator = Navigator;
+            App.Master = this;
+            
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ECommerceApp.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
@@ -9,7 +11,9 @@ namespace ECommerceApp
 {
     public partial class App : Application
     {
-        public static NavigationPage Navitagor { get; internal set; }
+        public static NavigationPage Navigator { get; internal set; }
+
+        public static MasterPage Master { get; internal set; }
 
         public App()
         {
