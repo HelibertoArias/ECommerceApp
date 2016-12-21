@@ -22,7 +22,7 @@ namespace ECommerceApp
         {
             InitializeComponent();
 
-            MainPage = new ECommerceApp.Pages.MasterPage();
+            MainPage = new ECommerceApp.Pages.LoginPage();
         }
         #region Methods
 
