@@ -31,14 +31,20 @@
       HeightRequest="3"
       Color="{StaticResource BackgroundColor}"></BoxView>
 
-    <Entry Placeholder="Usuario" TextColor="{StaticResource BackgroundColor}" Text="{Binding User, Mode=TwoWay}"/>
+    <Entry Placeholder="Usuario" TextColor="{StaticResource BackgroundColor}" Text="{Binding User, Mode=TwoWay}"
+           Keyboard="Email"/>
 
     <Entry Placeholder="Contraseña" TextColor="{StaticResource BackgroundColor}" IsPassword="True" Text="{Binding Password, Mode=TwoWay}"/>
 
     <Button Text="Ingresar"
+            Command="{Binding LoginCommand}"
      TextColor="{StaticResource AccentColor}"
      HorizontalOptions="Center"
      VerticalOptions="Center"/>
+    <ActivityIndicator
+      IsRunning="{Binding IsRunning}">
+      
+    </ActivityIndicator>
 
     <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
       <Label

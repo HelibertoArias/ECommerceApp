@@ -1,5 +1,6 @@
 ﻿using ECommerceApp.Pages;
 using System.Threading.Tasks;
+using System;
 
 namespace ECommerceApp.Services
 {
@@ -10,7 +11,7 @@ namespace ECommerceApp.Services
             App.Master.IsPresented = false; /*Oculta el menú lateral al seleccionar*/
             switch (pageName)
             {
-                case "CustormerPage":
+                case "CustomersPage":
                     await App.Navigator.PushAsync(new CustomersPage());
                     break;
 
@@ -42,6 +43,11 @@ namespace ECommerceApp.Services
                 default:
                     break;
             }
+        }
+
+        internal void SetMainPage()
+        {
+            App.Current.MainPage = new MasterPage();
         }
     }
 }
