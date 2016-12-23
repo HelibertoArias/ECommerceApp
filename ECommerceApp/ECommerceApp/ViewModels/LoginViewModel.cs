@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,20 +10,39 @@ using System.Windows.Input;
 
 namespace ECommerceApp.ViewModels
 {
-    public class LoginViewModel
+    public class LoginViewModel : INotifyPropertyChanged
     {
         #region Attribute
         private NavigationService navigationService;
         private DialogService dialogService;
         private ApiService apiService;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private bool isRunning;
+
+
+
         #endregion
 
         #region Properties
         public string User { get; set; }
         public string Password { get; set; }
         public bool IsRemembered { get; set; }
+        public bool IsRunning
+        {
+            set
+            {
+                if (isRunning != value)
+                {
+                    isRunning = value;
 
-        public bool IsRunning { get; set; }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
+
+                }
+
+            }
+            get { return isRunning; }
+        }
         #endregion
 
         public LoginViewModel()
