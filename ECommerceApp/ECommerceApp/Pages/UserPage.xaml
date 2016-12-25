@@ -1,13 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                          xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+
              x:Class="ECommerceApp.Pages.UserPage"
              Title="User page"
              BackgroundColor="{StaticResource BackgroundColor}"
-             BindingContext="{Binding Main, Source={StaticResource Locator} }">
-  <Label
-    Text="Users Page"
-    VerticalOptions="Center"
-    HorizontalOptions="Center"
-    TextColor="{StaticResource FontColor}"/>
+             BindingContext="{Binding Main, Source={StaticResource Locator} }"       >  
+             
+  <StackLayout
+    VerticalOptions="CenterAndExpand"
+    Spacing="10"
+    Padding="8"
+    BindingContext="{Binding UserLoged}">
+    <controls:CircleImage
+          Source="{Binding Photo}"
+          Aspect="AspectFill"
+          WidthRequest="300"
+          HeightRequest="300">
+    </controls:CircleImage>
+
+
+
+    <Label
+      Text="Bienvenid@"
+      FontSize="18"
+      VerticalOptions="Center"
+      HorizontalOptions="Center"
+      TextColor="{StaticResource FontColor}"/>
+
+    <Label
+     Text="{Binding FullName}"
+     FontSize="24"
+     VerticalOptions="Center"
+     HorizontalOptions="Center"
+     TextColor="{StaticResource FontColor}"/>
+
+  </StackLayout>
+
 </ContentPage>

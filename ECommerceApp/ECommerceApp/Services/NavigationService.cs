@@ -1,12 +1,15 @@
 ﻿using ECommerceApp.Pages;
 using System.Threading.Tasks;
 using System;
+using ECommerceApp.Models;
+using ECommerceApp.Data;
 
 namespace ECommerceApp.Services
 {
     public class NavigationService
     {
-        public async Task Navigate(string pageName)
+        private DataService dataService;
+       public async Task Navigate(string pageName)
         {
             App.Master.IsPresented = false; /*Oculta el menú lateral al seleccionar*/
             switch (pageName)
@@ -37,7 +40,10 @@ namespace ECommerceApp.Services
 
                 case "UserPage":
                     await App.Navigator.PushAsync(new UserPage());
+                    break;
 
+                case "Logout":
+                    Logout();
                     break;
 
                 default:
@@ -45,8 +51,21 @@ namespace ECommerceApp.Services
             }
         }
 
-        internal void SetMainPage()
+        //internal User GetCurrentUser()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        private void Logout()
         {
+            App.CurrentUser.IsRemembered = false;
+            dataService.UpdateUser(App.CurrentUser);
+            App.Current.MainPage = new LoginPage();
+
+        }
+        internal void SetMainPage(User user)
+        {
+            App.CurrentUser = user;
             App.Current.MainPage = new MasterPage();
         }
     }

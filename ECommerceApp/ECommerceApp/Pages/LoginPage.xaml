@@ -4,8 +4,8 @@
              x:Class="ECommerceApp.Pages.LoginPage"
              Title="E-Commerce"
              BackgroundColor="{StaticResource MainColor}"
-             BindingContext="{Binding Main, Source={StaticResource Locator} }"
-             xmlns:design="clr-namespace:ECommerceApp.Pages;assembly=ECommerceApp">
+             BindingContext="{Binding Main, Source={StaticResource Locator}}" 
+             >
 
 
   <StackLayout

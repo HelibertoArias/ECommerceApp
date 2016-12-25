@@ -1,4 +1,5 @@
-﻿using ECommerceApp.Pages;
+﻿using ECommerceApp.Data;
+using ECommerceApp.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,23 +7,40 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
+using ECommerceApp.Models;
 
 namespace ECommerceApp
 {
     public partial class App : Application
     {
         #region Attributes
+        private DataService dataService;
+
+  #endregion
 
         public static NavigationPage Navigator { get; internal set; }
 
-        public static MasterPage Master { get; internal set; } 
-        #endregion
+        public static MasterPage Master { get; internal set; }
+        public static User CurrentUser { get; internal set; }
 
         public App()
         {
-            InitializeComponent();
+            InitializeComponent( );
+            dataService = new DataService();
 
-            MainPage = new ECommerceApp.Pages.LoginPage();
+
+            var user = dataService.GetUser();
+
+            if(user!=null && user.IsRemembered){
+                App.CurrentUser = user;
+                MainPage =new MasterPage();
+            }
+            else
+            {
+                MainPage = new LoginPage();
+            }
+
+            //MainPage = new ECommerceApp.Pages.LoginPage();
         }
         #region Methods
 
