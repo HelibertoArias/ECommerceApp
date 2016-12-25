@@ -1,10 +1,20 @@
 ﻿using ECommerceApp.Data;
+using ECommerceApp.Models;
 using System.Collections.ObjectModel;
 
 namespace ECommerceApp.ViewModels
 {
     public class MainViewModel
     {
+        #region Singleton
+        private static MainViewModel instance;
+        public static MainViewModel GetInstance()
+        {
+            return instance ?? (instance = new MainViewModel());
+        }
+        #endregion
+
+
         #region Attribute
 
         private DataService dataService;
@@ -25,22 +35,26 @@ namespace ECommerceApp.ViewModels
 
         public MainViewModel()
         {
+            //Singleton
+            instance = this;
+
+            //Create observable collections
             Menu = new ObservableCollection<MenuItemViewModel>();
+
+            //Create views
             NewLogin = new LoginViewModel();
             UserLoged = new UserViewModel();
+
+            //Create instences service
             dataService = new DataService();
 
             LoadMenu();
-            LoadUser();
         }
 
-        private void LoadUser()
+        public void LoadUser(User user)
         {
-            var user = dataService.GetUser();
-            //if (user != null)
             UserLoged.FullName = user.FullName;
             UserLoged.Photo = user.PhotoFullPath;
-
         }
 
         #endregion Contructors
