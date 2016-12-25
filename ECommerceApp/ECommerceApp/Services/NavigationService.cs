@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System;
 using ECommerceApp.Models;
 using ECommerceApp.Data;
+using ECommerceApp.ViewModels;
 
 namespace ECommerceApp.Services
 {
@@ -42,7 +43,7 @@ namespace ECommerceApp.Services
                     await App.Navigator.PushAsync(new UserPage());
                     break;
 
-                case "Logout":
+                case "LogoutPage":
                     Logout();
                     break;
 
@@ -65,6 +66,8 @@ namespace ECommerceApp.Services
         }
         internal void SetMainPage(User user)
         {
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.LoadUser(user);
             App.CurrentUser = user;
             App.Current.MainPage = new MasterPage();
         }
