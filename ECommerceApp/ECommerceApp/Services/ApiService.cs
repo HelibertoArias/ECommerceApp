@@ -79,7 +79,7 @@ namespace ECommerceApp.Services
                     var result = await response.Content.ReadAsStringAsync();
                     var products = JsonConvert.DeserializeObject<List<Product>>(result);
 
-                    return products;
+                    return products.OrderBy(p=>p.Description).ToList();
                 }
 
             }

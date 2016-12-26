@@ -149,7 +149,7 @@ namespace ECommerceApp.Data
         {
             using (var dat = new DataAccess())
             {
-                return dat.GetList<Product>(true);
+                return dat.GetList<Product>(true).OrderBy(x=>x.Description).ToList();
             }
         }
     }
