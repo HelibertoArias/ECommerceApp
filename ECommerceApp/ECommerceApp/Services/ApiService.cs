@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceApp.Services
 {
-   public class ApiService
+    public class ApiService
     {
         public async Task<Response> Login(string email, string password)
         {
@@ -18,8 +18,8 @@ namespace ECommerceApp.Services
                 var loginRequest = new LoginRequest { Email = email, Password = password };
 
                 var request = JsonConvert.SerializeObject(loginRequest);
-                var content =new   StringContent(request, Encoding.UTF8, "application/json");
-                using (var client= new HttpClient())
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("http://zulu-software.com");
                     var url = "/Ecommerce/api/Users/Login";
@@ -50,10 +50,42 @@ namespace ECommerceApp.Services
             }
             catch (Exception ex)
             {
-                return new Response {
+                return new Response
+                {
                     IsSuccess = false,
                     Message = ex.Message
                 };
+            }
+        }
+
+        public async Task<List<Product>> GetProducts()
+        {
+            try
+            {
+
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://zulu-software.com");
+                    var url = "/Ecommerce/api/Products/";
+
+                    var response = await client.GetAsync(url);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    var result = await response.Content.ReadAsStringAsync();
+                    var products = JsonConvert.DeserializeObject<List<Product>>(result);
+
+                    return products;
+                }
+
+            }
+            catch
+            {
+                return null;
             }
         }
     }

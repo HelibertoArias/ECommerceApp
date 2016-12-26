@@ -1,12 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ECommerceApp.Pages.ProductsPage" 
+             x:Class="ECommerceApp.Pages.ProductsPage"
              Title="Productos"
              BackgroundColor="{StaticResource BackgroundColor}"
              BindingContext="{Binding Main, Source={StaticResource Locator} }">
-  <Label
-    Text="Products Page"
-    VerticalOptions="Center"
-    HorizontalOptions="Center" TextColor="{StaticResource FontColor}"/>
+
+  <ListView
+    ItemsSource="{Binding Products}"
+    HasUnevenRows="True">
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <ViewCell>
+          <Grid Padding="8">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"></ColumnDefinition>
+              <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Image
+              Source="{Binding ImageFullPath}"
+              VerticalOptions="Start"
+              WidthRequest="100"
+              HeightRequest="100"/>
+            <StackLayout Grid.Column="1">
+              <Label
+                FontAttributes="Bold"
+                VerticalOptions="Center"
+                TextColor="{StaticResource FontColor}"
+                Text="{Binding Description, StringFormat='Precio :{0:C2}'}"/>
+              <Label
+                VerticalOptions="Center"
+                TextColor="{StaticResource FontColor}"
+                Text="{Binding Price}"/>
+              <Label
+                VerticalOptions="Center"
+                TextColor="{StaticResource FontColor}"
+                Text="{Binding Stock, StringFormat='Strock: {0:N2}'}"/>
+            </StackLayout>
+          </Grid>
+        </ViewCell>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+
 </ContentPage>

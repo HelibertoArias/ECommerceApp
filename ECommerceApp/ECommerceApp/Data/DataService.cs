@@ -77,5 +77,80 @@ namespace ECommerceApp.Data
                 };
             }
         }
+
+        public void SaveProducts(List<Product> products)
+        {
+            using (var da = new DataAccess())
+            {
+                //Deleting old data
+                var oldProducts = da.GetList<Product>(false);
+                foreach (var product in oldProducts)
+                {
+                    da.Delete(product);
+                }
+
+                //Adding new data
+                foreach (var product in products)
+                {
+                    da.Insert(product);
+                }
+            }
+        }
+
+        public Response Login(string email, string password)
+        {
+            try
+            {
+
+                using (var da = new DataAccess())
+                {
+                    var user = da.First<User>(true);
+                    if(user== null)
+                    {
+                        return new Response
+                        {
+                            IsSuccess = false,
+                            Message = "No hay conexión."
+                        };
+                    }
+
+                    if(user.UserName.ToUpper() == email.ToUpper() && user.Password == password)
+                    {
+                        return new Response
+                        {
+                            IsSuccess = true,
+                            Message = "Login ok", 
+                            Result= user
+                        };
+                    }
+
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = "Usuario o clave incorrecto"
+                    };
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+            
+        }
+
+        internal List<Product> GetProducts()
+        {
+            using (var dat = new DataAccess())
+            {
+                return dat.GetList<Product>(true);
+            }
+        }
     }
 }

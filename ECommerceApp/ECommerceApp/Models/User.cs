@@ -29,6 +29,7 @@ namespace ECommerceApp.Models
         public bool IsSupplier { get; set; }
         public string Password { get; set; }
         public string FullName { get { return $"{FirtsName} {LastName}"; } }
+
         public string PhotoFullPath
         {
             get
@@ -36,6 +37,7 @@ namespace ECommerceApp.Models
                 return $"http://zulu-software.com/ECommerce{Photo.Substring(1)}";
             }
         }
+
         public override int GetHashCode()
         {
             return UserId;

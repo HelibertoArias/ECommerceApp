@@ -15,6 +15,7 @@ namespace ECommerceApp.ViewModels
         private DialogService dialogService;
         private ApiService apiService;
         private DataService dataService;
+        private NetService netService;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -50,8 +51,9 @@ namespace ECommerceApp.ViewModels
             dialogService = new DialogService();
             IsRemembered = true;
             apiService = new ApiService();
-            dataService =new  DataService();
+            dataService = new DataService();
             IsRemembered = true;
+            netService = new NetService();
         }
 
         public ICommand LoginCommand { get { return new RelayCommand(Login); } }
@@ -71,7 +73,18 @@ namespace ECommerceApp.ViewModels
             }
 
             IsRunning = true;
-            var response = await apiService.Login(User, Password);
+            var response = new Response();
+
+            if (netService.IsConnected())
+            {
+                response = await apiService.Login(User, Password);               
+            }
+            else
+            {
+                response =  dataService.Login(User, Password);
+            }
+
+
             IsRunning = false;
 
             if (!response.IsSuccess)
@@ -79,6 +92,8 @@ namespace ECommerceApp.ViewModels
                 await dialogService.ShowMessage("Error", response.Message);
                 return;
             }
+
+
 
             var user = (User)response.Result;
             user.IsRemembered = IsRemembered;
