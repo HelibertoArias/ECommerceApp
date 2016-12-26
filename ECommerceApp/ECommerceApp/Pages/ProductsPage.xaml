@@ -6,41 +6,48 @@
              BackgroundColor="{StaticResource BackgroundColor}"
              BindingContext="{Binding Main, Source={StaticResource Locator} }">
 
-  <ListView
-    ItemsSource="{Binding Products}"
-    HasUnevenRows="True">
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <ViewCell>
-          <Grid Padding="8">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto"></ColumnDefinition>
-              <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Image
-              Source="{Binding ImageFullPath}"
-              VerticalOptions="Start"
-              WidthRequest="100"
-              HeightRequest="100"/>
-            <StackLayout Grid.Column="1">
-              <Label
-                FontAttributes="Bold"
-                VerticalOptions="Center"
-                TextColor="{StaticResource FontColor}"
-                Text="{Binding Description, StringFormat='Precio :{0:C2}'}"/>
-              <Label
-                VerticalOptions="Center"
-                TextColor="{StaticResource FontColor}"
-                Text="{Binding Price}"/>
-              <Label
-                VerticalOptions="Center"
-                TextColor="{StaticResource FontColor}"
-                Text="{Binding Stock, StringFormat='Strock: {0:N2}'}"/>
-            </StackLayout>
-          </Grid>
-        </ViewCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-  </ListView>
-
+  <StackLayout>
+    <SearchBar
+       Placeholder="Buscar..."
+       Text="{Binding Filter}"
+       SearchCommand="{Binding SearchProductCommand}">
+    </SearchBar>
+    
+    <ListView
+      ItemsSource="{Binding Products}"
+      HasUnevenRows="True">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <Grid Padding="8">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+              </Grid.ColumnDefinitions>
+              <Image
+                Source="{Binding ImageFullPath}"
+                VerticalOptions="Start"
+                WidthRequest="100"
+                HeightRequest="100"/>
+              <StackLayout Grid.Column="1">
+                <Label
+                  FontAttributes="Bold"
+                  VerticalOptions="Center"
+                  TextColor="{StaticResource FontColor}"
+                  Text="{Binding Description, StringFormat='Precio :{0:C2}'}"/>
+                <Label
+                  VerticalOptions="Center"
+                  TextColor="{StaticResource FontColor}"
+                  Text="{Binding Price}"/>
+                <Label
+                  VerticalOptions="Center"
+                  TextColor="{StaticResource FontColor}"
+                  Text="{Binding Stock, StringFormat='Strock: {0:N2}'}"/>
+              </StackLayout>
+            </Grid>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </StackLayout>
 </ContentPage>

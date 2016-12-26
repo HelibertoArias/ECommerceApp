@@ -152,5 +152,16 @@ namespace ECommerceApp.Data
                 return dat.GetList<Product>(true).OrderBy(x=>x.Description).ToList();
             }
         }
+
+        public List<Product> GetProducts(string filter)
+        {
+            using (var dat = new DataAccess())
+            {
+                return dat.GetList<Product>(true)
+                    .Where(p=>p.Description.ToUpper().Contains(filter.ToUpper()))
+                    .OrderBy(x => x.Description)
+                    .ToList();
+            }
+        }
     }
 }

@@ -1,12 +1,16 @@
 ﻿using ECommerceApp.Data;
 using ECommerceApp.Models;
 using ECommerceApp.Services;
+using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System;
+using System.ComponentModel;
 
 namespace ECommerceApp.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
         #region Singleton
 
@@ -27,6 +31,10 @@ namespace ECommerceApp.ViewModels
         private ApiService apiService;
         private NetService netService;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string filter;
+
         #endregion Attribute
 
         #region Properties
@@ -38,6 +46,33 @@ namespace ECommerceApp.ViewModels
         public LoginViewModel NewLogin { get; set; }
 
         public UserViewModel UserLoged { get; set; }
+
+        public string Filter
+        {
+            set
+            {
+                if (filter != value)
+                {
+                    filter = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Filter"));
+                        if (string.IsNullOrEmpty(filter))
+                        {
+                            LoadLocalProducts();
+                        }
+                    }
+                }
+            }
+            get { return filter; }
+        }
+
+        private void LoadLocalProducts()
+        {
+            var products = dataService.GetProducts();
+            Products.Clear();
+            ReloadProducts(products);
+        }
 
         #endregion Properties
 
@@ -65,13 +100,13 @@ namespace ECommerceApp.ViewModels
             LoadProducts();
         }
 
+        #endregion Contructors
+
         public void LoadUser(User user)
         {
             UserLoged.FullName = user.FullName;
             UserLoged.Photo = user.PhotoFullPath;
         }
-
-        #endregion Contructors
 
         #region Methods
 
@@ -103,6 +138,30 @@ namespace ECommerceApp.ViewModels
 
             Products.Clear();
 
+            ReloadProducts(products);
+        }
+
+        private void AddItem(string icon, string pageName, string title)
+        {
+            Menu.Add(new MenuItemViewModel { Icon = icon, PageName = pageName, Title = title });
+        }
+
+        #endregion Methods
+
+        #region Command
+        public ICommand SearchProductCommand { get { return new RelayCommand(SearchProduct); } }
+
+        private void SearchProduct()
+        {
+            var products = dataService.GetProducts(Filter);
+            Products.Clear();
+
+            ReloadProducts(products);
+
+        }
+
+        private void ReloadProducts(List<Product> products)
+        {
             foreach (var product in products)
             {
                 Products.Add(new ProductItemViewModel()
@@ -124,12 +183,9 @@ namespace ECommerceApp.ViewModels
                 });
             }
         }
+        #endregion
 
-        private void AddItem(string icon, string pageName, string title)
-        {
-            Menu.Add(new MenuItemViewModel { Icon = icon, PageName = pageName, Title = title });
-        }
 
-        #endregion Methods
+
     }
 }
