@@ -10,7 +10,13 @@ namespace ECommerceApp.Services
     public class NavigationService
     {
         private DataService dataService;
-       public async Task Navigate(string pageName)
+
+        public NavigationService()
+        {
+            dataService = new DataService();
+        }
+
+        public async Task Navigate(string pageName)
         {
             App.Master.IsPresented = false; /*Oculta el menú lateral al seleccionar*/
             switch (pageName)

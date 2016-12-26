@@ -10,7 +10,9 @@ namespace ECommerceApp.ViewModels
         private static MainViewModel instance;
         public static MainViewModel GetInstance()
         {
-            return instance ?? (instance = new MainViewModel());
+            if( instance==null)
+                instance = new MainViewModel();
+            return instance;
         }
         #endregion
 
