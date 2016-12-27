@@ -130,13 +130,6 @@ namespace ECommerceApp.Data
         #endregion
 
         #region Products
-        public List<Product> GetProducts()
-        {
-            using (var dat = new DataAccess())
-            {
-                return dat.GetList<Product>(true).OrderBy(x => x.Description).ToList();
-            }
-        }
 
         public List<Product> GetProducts(string filter)
         {
@@ -149,36 +142,15 @@ namespace ECommerceApp.Data
             }
         }
 
-        public void SaveProducts(List<Product> products)
-        {
-            using (var da = new DataAccess())
-            {
-                //Deleting old data
-                var oldProducts = da.GetList<Product>(false);
-                foreach (var product in oldProducts)
-                {
-                    da.Delete(product);
-                }
-
-                //Adding new data
-                foreach (var product in products)
-                {
-                    da.Insert(product);
-                }
-            }
-        }
 
         #endregion
 
-        #region Custormers
-        public List<Customer> GetCustomers()
+        #region Customers
+        public List<T> Get<T>(bool withChildren) where T : class
         {
             using (var dat = new DataAccess())
             {
-                return dat.GetList<Customer>(true)
-                            .OrderBy(x => x.FirstName)
-                            .ThenBy(x => x.LastName)
-                            .ToList();
+                return dat.GetList<T>(withChildren).ToList();
             }
         }
 
@@ -191,32 +163,35 @@ namespace ECommerceApp.Data
                                 || p.LastName.ToUpper().Contains(filter.ToUpper())
                           )
                     .OrderBy(x => x.FirstName)
-                    .ThenBy(x=>x.LastName)
+                    .ThenBy(x => x.LastName)
                     .ToList();
             }
         }
 
-        public void SaveCustomers(List<Customer> customers)
+        public void Save<T>(List<T> list) where T : class
         {
             using (var da = new DataAccess())
             {
                 //Deleting old data
-                var oldCustomeres = da.GetList<Customer>(false);
-                foreach (var customer in oldCustomeres)
+                var oldRecords = da.GetList<T>(false);
+                foreach (var record in oldRecords)
                 {
-                    da.Delete(customer);
+                    da.Delete(record);
                 }
 
                 //Adding new data
-                foreach (var customer in customers)
+                foreach (var record in list)
                 {
-                    da.Insert(customer);
+                    da.Insert(record);
                 }
             }
         }
 
 
         #endregion
+
+
+
 
     }
 }

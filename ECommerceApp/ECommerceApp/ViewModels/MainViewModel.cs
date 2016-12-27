@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System;
 using System.ComponentModel;
-
+using System.Linq;
 namespace ECommerceApp.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
@@ -158,7 +158,7 @@ namespace ECommerceApp.ViewModels
         #region Customers
         private void LoadLocalCustomers()
         {
-            var customers = dataService.GetCustomers();
+            var customers = dataService.Get<Customer>(true);
             ReloadCustomers(customers);
         }
 
@@ -168,12 +168,12 @@ namespace ECommerceApp.ViewModels
 
             if (netService.IsConnected())
             {
-                customers = await apiService.GetCustomers();
-                dataService.SaveCustomers(customers);
+                customers = await apiService.Get<Customer>("Customers");
+                dataService.Save<Customer>(customers);
             }
             else
             {
-                customers = dataService.GetCustomers();
+                customers = dataService.Get<Customer>(true);
             }
 
             Customers.Clear();
@@ -184,6 +184,8 @@ namespace ECommerceApp.ViewModels
         private void ReloadCustomers(List<Customer> customers)
         {
             Customers.Clear();
+            customers = customers.OrderBy(x => x.FirstName).ThenBy(x => x.LastName).ToList();
+
             foreach (var customer in customers)
             {
                 Customers.Add(new CustomerItemViewModel
@@ -214,7 +216,7 @@ namespace ECommerceApp.ViewModels
         #region Products
         private void LoadLocalProducts()
         {
-            var products = dataService.GetProducts();
+            var products = dataService.Get<Product>(true);
             ReloadProducts(products);
         }
 
@@ -225,15 +227,13 @@ namespace ECommerceApp.ViewModels
 
             if (netService.IsConnected())
             {
-                products = await apiService.GetProducts();
-                dataService.SaveProducts(products);
+                products = await apiService.Get<Product>("Products");
+                dataService.Save<Product>(products);
             }
             else
             {
-                products = dataService.GetProducts();
-            }
-
-            Products.Clear();
+                products = dataService.Get<Product>(true);
+            }             
 
             ReloadProducts(products);
         }
@@ -241,6 +241,8 @@ namespace ECommerceApp.ViewModels
         private void ReloadProducts(List<Product> products)
         {
             Products.Clear();
+            products = products.OrderBy(x => x.Description).ToList();
+
             foreach (var product in products)
             {
                 Products.Add(new ProductItemViewModel()
