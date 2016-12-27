@@ -9,11 +9,20 @@ namespace ECommerceApp.Data
 {
     public class DataService
     {
+        #region Users
+        public User GetUser()
+        {
+            using (var da = new DataAccess())
+            {
+                return da.First<User>(true);
+            }
+        }
+
         public Response UpdateUser(User user)
         {
             try
             {
-                using(var da = new DataAccess())
+                using (var da = new DataAccess())
                 {
                     da.Update<User>(user);
                 }
@@ -35,16 +44,8 @@ namespace ECommerceApp.Data
             }
         }
 
-        public User GetUser()
+        public Response InsertUser(User user)
         {
-            using (var da=new DataAccess())
-            {
-                return da.First<User>(true);
-            }
-        }
-
-        
-        public Response InsertUser(User user) {
             try
             {
                 using (var da = new DataAccess())
@@ -57,12 +58,12 @@ namespace ECommerceApp.Data
 
                     da.Insert(user);
 
-                    
+
                 }
 
                 return new Response
                 {
-                    IsSuccess=true,
+                    IsSuccess = true,
                     Message = "Usuario insertado Ok",
                     Result = user
                 };
@@ -75,6 +76,76 @@ namespace ECommerceApp.Data
                     IsSuccess = false,
                     Message = ex.Message
                 };
+            }
+        }
+
+        public Response Login(string email, string password)
+        {
+            try
+            {
+
+                using (var da = new DataAccess())
+                {
+                    var user = da.First<User>(true);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            IsSuccess = false,
+                            Message = "No hay conexión."
+                        };
+                    }
+
+                    if (user.UserName.ToUpper() == email.ToUpper() && user.Password == password)
+                    {
+                        return new Response
+                        {
+                            IsSuccess = true,
+                            Message = "Login ok",
+                            Result = user
+                        };
+                    }
+
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = "Usuario o clave incorrecto"
+                    };
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+
+        }
+
+        #endregion
+
+        #region Products
+        public List<Product> GetProducts()
+        {
+            using (var dat = new DataAccess())
+            {
+                return dat.GetList<Product>(true).OrderBy(x => x.Description).ToList();
+            }
+        }
+
+        public List<Product> GetProducts(string filter)
+        {
+            using (var dat = new DataAccess())
+            {
+                return dat.GetList<Product>(true)
+                    .Where(p => p.Description.ToUpper().Contains(filter.ToUpper()))
+                    .OrderBy(x => x.Description)
+                    .ToList();
             }
         }
 
@@ -97,71 +168,55 @@ namespace ECommerceApp.Data
             }
         }
 
-        public Response Login(string email, string password)
-        {
-            try
-            {
+        #endregion
 
-                using (var da = new DataAccess())
-                {
-                    var user = da.First<User>(true);
-                    if(user== null)
-                    {
-                        return new Response
-                        {
-                            IsSuccess = false,
-                            Message = "No hay conexión."
-                        };
-                    }
-
-                    if(user.UserName.ToUpper() == email.ToUpper() && user.Password == password)
-                    {
-                        return new Response
-                        {
-                            IsSuccess = true,
-                            Message = "Login ok", 
-                            Result= user
-                        };
-                    }
-
-                    return new Response
-                    {
-                        IsSuccess = false,
-                        Message = "Usuario o clave incorrecto"
-                    };
-
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                return new Response
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                };
-            }
-            
-        }
-
-        internal List<Product> GetProducts()
+        #region Custormers
+        public List<Customer> GetCustomers()
         {
             using (var dat = new DataAccess())
             {
-                return dat.GetList<Product>(true).OrderBy(x=>x.Description).ToList();
+                return dat.GetList<Customer>(true)
+                            .OrderBy(x => x.FirstName)
+                            .ThenBy(x => x.LastName)
+                            .ToList();
             }
         }
 
-        public List<Product> GetProducts(string filter)
+        public List<Customer> GetCustomers(string filter)
         {
             using (var dat = new DataAccess())
             {
-                return dat.GetList<Product>(true)
-                    .Where(p=>p.Description.ToUpper().Contains(filter.ToUpper()))
-                    .OrderBy(x => x.Description)
+                return dat.GetList<Customer>(true)
+                    .Where(p => p.FirstName.ToUpper().Contains(filter.ToUpper())
+                                || p.LastName.ToUpper().Contains(filter.ToUpper())
+                          )
+                    .OrderBy(x => x.FirstName)
+                    .ThenBy(x=>x.LastName)
                     .ToList();
             }
         }
+
+        public void SaveCustomers(List<Customer> customers)
+        {
+            using (var da = new DataAccess())
+            {
+                //Deleting old data
+                var oldCustomeres = da.GetList<Customer>(false);
+                foreach (var customer in oldCustomeres)
+                {
+                    da.Delete(customer);
+                }
+
+                //Adding new data
+                foreach (var customer in customers)
+                {
+                    da.Insert(customer);
+                }
+            }
+        }
+
+
+        #endregion
+
     }
 }

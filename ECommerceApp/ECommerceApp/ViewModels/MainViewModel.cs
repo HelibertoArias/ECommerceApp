@@ -33,45 +33,68 @@ namespace ECommerceApp.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string filter;
+        //-->Filters
+        private string productsFilter;
+        private string customersFilter;
 
         #endregion Attribute
 
         #region Properties
 
+        //-> Observable list
         public ObservableCollection<MenuItemViewModel> Menu { get; set; }
 
         public ObservableCollection<ProductItemViewModel> Products { get; set; }
+
+        public ObservableCollection<Customer> Customers { get; set; }
+
+
+
 
         public LoginViewModel NewLogin { get; set; }
 
         public UserViewModel UserLoged { get; set; }
 
-        public string Filter
+
+        //-> Filters
+        public string ProductsFilter
         {
             set
             {
-                if (filter != value)
+                if (productsFilter != value)
                 {
-                    filter = value;
+                    productsFilter = value;
                     if (PropertyChanged != null)
                     {
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Filter"));
-                        if (string.IsNullOrEmpty(filter))
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProductsFilter"));
+                        if (string.IsNullOrEmpty(productsFilter))
                         {
                             LoadLocalProducts();
                         }
                     }
                 }
             }
-            get { return filter; }
+            get { return productsFilter; }
         }
 
-        private void LoadLocalProducts()
+        public string CustomersFilter
         {
-            var products = dataService.GetProducts();
-            Products.Clear();
-            ReloadProducts(products);
+            set
+            {
+                if (customersFilter != value)
+                {
+                    customersFilter = value;
+                    if (PropertyChanged != null)
+                    {
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CustomersFilter"));
+                        if (string.IsNullOrEmpty(customersFilter))
+                        {
+                            LoadLocalCustomers();
+                        }
+                    }
+                }
+            }
+            get { return customersFilter; }
         }
 
         #endregion Properties
@@ -86,6 +109,7 @@ namespace ECommerceApp.ViewModels
             //Create observable collections
             Menu = new ObservableCollection<MenuItemViewModel>();
             Products = new ObservableCollection<ProductItemViewModel>();
+            Customers = new ObservableCollection<Customer>();
 
             //Create views
             NewLogin = new LoginViewModel();
@@ -98,9 +122,13 @@ namespace ECommerceApp.ViewModels
 
             LoadMenu();
             LoadProducts();
+            LoadCustomers();
         }
 
+
         #endregion Contructors
+
+      
 
         public void LoadUser(User user)
         {
@@ -109,6 +137,11 @@ namespace ECommerceApp.ViewModels
         }
 
         #region Methods
+
+        private void AddItem(string icon, string pageName, string title)
+        {
+            Menu.Add(new MenuItemViewModel { Icon = icon, PageName = pageName, Title = title });
+        }
 
         private void LoadMenu()
         {
@@ -119,6 +152,70 @@ namespace ECommerceApp.ViewModels
             AddItem("ic_action_sync.png", "SyncPage", "Sincronizar");
             AddItem("ic_action_setup.png", "SetupPage", "Configuración");
             AddItem("ic_action_logout.png", "LogoutPage", "Salir");
+        }
+
+
+        #region Customers
+        private void LoadLocalCustomers()
+        {
+            var customers = dataService.GetCustomers();
+            ReloadCustomers(customers);
+        }
+
+        private async void LoadCustomers()
+        {
+            var customers = new List<Customer>();
+
+            if (netService.IsConnected())
+            {
+                customers = await apiService.GetCustomers();
+                dataService.SaveCustomers(customers);
+            }
+            else
+            {
+                customers = dataService.GetCustomers();
+            }
+
+            Customers.Clear();
+
+            ReloadCustomers(customers);
+        }
+
+        private void ReloadCustomers(List<Customer> customers)
+        {
+            Customers.Clear();
+            foreach (var customer in customers)
+            {
+                Customers.Add(new CustomerItemViewModel
+                {
+                    Address = customer.Address,
+                    City = customer.City,
+                    CityId = customer.CityId,
+                    CompanyCustomers = customer.CompanyCustomers,
+                    CustomerId = customer.CustomerId,
+                    Department = customer.Department,
+                    DepartmentId = customer.DepartmentId,
+                    FirstName = customer.FirstName,
+                    IsUpdated = customer.IsUpdated,
+                    LastName = customer.LastName,
+                    Latitude = customer.Latitude,
+                    Longitude = customer.Longitude,
+                    Orders = customer.Orders,
+                    Phone = customer.Phone,
+                    Photo = customer.Photo,
+                    Sales = customer.Sales,
+                    UserName = customer.UserName
+                });
+            }
+        }
+
+        #endregion
+
+        #region Products
+        private void LoadLocalProducts()
+        {
+            var products = dataService.GetProducts();
+            ReloadProducts(products);
         }
 
         private async void LoadProducts()
@@ -141,27 +238,9 @@ namespace ECommerceApp.ViewModels
             ReloadProducts(products);
         }
 
-        private void AddItem(string icon, string pageName, string title)
-        {
-            Menu.Add(new MenuItemViewModel { Icon = icon, PageName = pageName, Title = title });
-        }
-
-        #endregion Methods
-
-        #region Command
-        public ICommand SearchProductCommand { get { return new RelayCommand(SearchProduct); } }
-
-        private void SearchProduct()
-        {
-            var products = dataService.GetProducts(Filter);
-            Products.Clear();
-
-            ReloadProducts(products);
-
-        }
-
         private void ReloadProducts(List<Product> products)
         {
+            Products.Clear();
             foreach (var product in products)
             {
                 Products.Add(new ProductItemViewModel()
@@ -183,9 +262,29 @@ namespace ECommerceApp.ViewModels
                 });
             }
         }
+
+
         #endregion
 
 
+        #endregion Methods
 
+        #region Command
+        public ICommand SearchProductCommand { get { return new RelayCommand(SearchProduct); } }
+        public ICommand SearchCustomerCommand { get { return new RelayCommand(SearchCustomer); } }
+
+        private void SearchProduct()
+        {
+            var products = dataService.GetProducts(ProductsFilter);
+           ReloadProducts(products);
+
+        }
+        private void SearchCustomer()
+        {
+            var customers= dataService.GetCustomers(CustomersFilter);
+            ReloadCustomers(customers);
+        }
+
+        #endregion
     }
 }

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:infra="clr-namespace:ECommerceApp.Infrastructure; assembly=ECommerceApp"         
+             xmlns:infra="clr-namespace:ECommerceApp.Infrastructure; assembly=ECommerceApp"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              x:Class="ECommerceApp.App">
   <Application.Resources>
     <ResourceDictionary>
@@ -17,7 +18,7 @@
       <!--Crea la instancia del Menu : Start-->
       <infra:InstanceLocator x:Key="Locator"></infra:InstanceLocator>
       <!--Crea la instancia del Menu : End-->
-      
+
       <!--Data templates : Start-->
       <DataTemplate x:Key="ProductItemTemplate">
         <ViewCell>
@@ -45,6 +46,42 @@
                 VerticalOptions="Center"
                 TextColor="{StaticResource FontColor}"
                 Text="{Binding Stock, StringFormat='Strock: {0:N2}'}"/>
+            </StackLayout>
+          </Grid>
+        </ViewCell>
+      </DataTemplate>
+
+      <DataTemplate x:Key="CustomerItemTemplate">
+        <ViewCell>
+          <Grid Padding="8">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"></ColumnDefinition>
+              <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <controls:CircleImage
+                Source="{Binding PhotoFullPath}"
+                Aspect="AspectFill"
+                WidthRequest="100"
+                HeightRequest="100">
+            </controls:CircleImage>
+            <StackLayout Grid.Column="1">
+              <Label
+                FontAttributes="Bold"
+                VerticalOptions="Center"
+                TextColor="{StaticResource FontColor}"
+                Text="{Binding FullName}"/>
+              <Label
+                VerticalOptions="Center"
+                TextColor="{StaticResource FontColor}"
+                Text="{Binding UserName, StringFormat='Email: {0}'}"/>
+              <Label
+                VerticalOptions="Center"
+                TextColor="{StaticResource FontColor}"
+                Text="{Binding Adress, StringFormat='Dirección: {0}'}"/>
+              <Label
+               VerticalOptions="Center"
+               TextColor="{StaticResource FontColor}"
+               Text="{Binding Phone, StringFormat='Teléfono: {0}'}"/>
             </StackLayout>
           </Grid>
         </ViewCell>
