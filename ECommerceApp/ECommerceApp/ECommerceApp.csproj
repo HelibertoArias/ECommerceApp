@@ -38,6 +38,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BindablePicker.cs" />
     <Compile Include="Data\DataAccess.cs" />
     <Compile Include="Data\DataService.cs" />
     <Compile Include="Infrastructure\InstanceLocator.cs" />
@@ -57,6 +58,9 @@
     <Compile Include="Models\Sale.cs" />
     <Compile Include="Models\Tax.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Pages\CustomerDetailPage.xaml.cs">
+      <DependentUpon>CustomerDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\CustomersPage.xaml.cs">
       <DependentUpon>CustomersPage.xaml</DependentUpon>
     </Compile>
@@ -211,6 +215,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\CustomerDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

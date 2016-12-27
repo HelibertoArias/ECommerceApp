@@ -13,6 +13,8 @@
       <Color x:Key="MenuFontColor">#F2FFE3</Color>
       <Color x:Key="BackgroundColor">#F2FFE3</Color>
       <Color x:Key="AccentColor">#F2FFE3</Color>
+      <Color x:Key="RedColor">#673AB7</Color>
+      <Color x:Key="OrangeColor">#673AB7</Color>
       <!--Colores :End-->
 
       <!--Crea la instancia del Menu : Start-->
@@ -22,11 +24,14 @@
       <!--Data templates : Start-->
       <DataTemplate x:Key="ProductItemTemplate">
         <ViewCell>
-          <Grid Padding="8">
+          <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto"></ColumnDefinition>
               <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
+
+          
+            
             <Image
               Source="{Binding ImageFullPath}"
               VerticalOptions="Start"
@@ -53,7 +58,11 @@
 
       <DataTemplate x:Key="CustomerItemTemplate">
         <ViewCell>
-          <Grid Padding="8">
+          <Grid>
+            <Grid.GestureRecognizers>
+              <TapGestureRecognizer Command="{Binding CustomerDetailCommand}"/>
+            </Grid.GestureRecognizers>
+            
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto"></ColumnDefinition>
               <ColumnDefinition Width="*"></ColumnDefinition>

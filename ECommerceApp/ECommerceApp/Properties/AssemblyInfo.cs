@@ -30,4 +30,4 @@ using Xamarin.Forms.Xaml;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 //Compilando XAML files, https://developer.xamarin.com/guides/xamarin-forms/xaml/xamlc/
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+//[assembly: XamlCompilation(XamlCompilationOptions.Compile)]

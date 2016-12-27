@@ -7,7 +7,7 @@
              BackgroundColor="{StaticResource BackgroundColor}"
              BindingContext="{Binding Main, Source={StaticResource Locator} }">
 
-  <StackLayout>
+  <StackLayout  Padding="8">
     <SearchBar
        Placeholder="Buscar..."
        Text="{Binding CustomersFilter, Mode=TwoWay}"

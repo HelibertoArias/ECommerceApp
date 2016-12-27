@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ECommerceApp.Pages.CustomerDetailPage"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             xmlns:control="clr-namespace:ECommerceApp.Controls"
+             Title="Detalles de Cliente"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}">
+  <ScrollView
+    BindingContext="{Binding CurrentCustomer}">
+    <StackLayout
+      Padding="8">
+      <StackLayout
+        Orientation="Horizontal">
+        <controls:CircleImage
+          Source="{Binding PhotoFullPath}"
+          Aspect="AspectFill"
+          WidthRequest="100"
+          HeightRequest="100"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </controls:CircleImage>
+        <Label
+          Text="{Binding FullName}"
+          TextColor="{StaticResource FontColor}"
+          FontSize="20"
+          FontAttributes="Bold"
+          VerticalOptions="Center"
+          HorizontalOptions="CenterAndExpand">
+        </Label>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Correo:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <Entry
+          Placeholder="Correo"
+          Text="{Binding UserName, Mode=TwoWay}"
+          Keyboard="Email"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Entry>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Nombres:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <Entry
+          Placeholder="Nombres"
+          Text="{Binding FirstName, Mode=TwoWay}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Entry>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Apellidos:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <Entry
+          Placeholder="Apellidos"
+          Text="{Binding LastName, Mode=TwoWay}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Entry>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Teléfono:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <Entry
+          Placeholder="Teléfono"
+          Text="{Binding Phone, Mode=TwoWay}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Entry>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Dirección:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <Entry
+          Placeholder="Dirección"
+          Text="{Binding Address, Mode=TwoWay}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Entry>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Departamento:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <control:BindablePicker
+          Title="Seleccione un departamento"
+          DisplayMemberPath="Name"
+          SelectedValuePath="DepartmentId"
+          ItemsSource="{Binding Departments}"
+          SelectedValue ="{Binding Path=DepartmentId, Mode=TwoWay}"
+          HorizontalOptions="FillAndExpand"
+          VerticalOptions="Center">
+        </control:BindablePicker>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Ciudad:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <control:BindablePicker
+          Title="Seleccione una ciudad"
+          DisplayMemberPath="Name"
+          SelectedValuePath="CityId"
+          ItemsSource="{Binding Cities}"
+          SelectedValue ="{Binding Path=CityId, Mode=TwoWay}"
+          HorizontalOptions="FillAndExpand"
+          VerticalOptions="Center">
+        </control:BindablePicker>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Label
+          Text="Latidud:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <Entry
+          Placeholder="Latitud"
+          IsEnabled="false"
+          Text="{Binding Latitude, Mode=TwoWay}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Entry>
+        <Label
+          Text="Longitud:"
+          TextColor="{StaticResource FontColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="Start">
+        </Label>
+        <Entry
+          Placeholder="Longitud"
+          IsEnabled="false"
+          Text="{Binding Longitude, Mode=TwoWay}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Entry>
+      </StackLayout>
+      <StackLayout
+        Orientation="Horizontal">
+        <Button
+          Text="Localización"
+          TextColor="{StaticResource BackgroundColor}"
+          BackgroundColor="{StaticResource MainColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Button>
+        <Button
+          Text="Actualizar"
+          TextColor="{StaticResource BackgroundColor}"
+          BackgroundColor="{StaticResource OrangeColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Button>
+        <Button
+          Command="{Binding DeleteCustomerCommand}"
+          Text="Borrar"
+          TextColor="{StaticResource BackgroundColor}"
+          BackgroundColor="{StaticResource RedColor}"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand">
+        </Button>
+      </StackLayout>
+    </StackLayout>
+  </ScrollView>
+</ContentPage>

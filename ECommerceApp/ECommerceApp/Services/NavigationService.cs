@@ -25,6 +25,10 @@ namespace ECommerceApp.Services
                     await App.Navigator.PushAsync(new CustomersPage());
                     break;
 
+                case "CustomerDetailPage":
+                    await App.Navigator.PushAsync(new CustomerDetailPage());
+                    break;
+
                 case "DeliveriesPage":
                     await App.Navigator.PushAsync(new DeliveriesPage());
                     break;

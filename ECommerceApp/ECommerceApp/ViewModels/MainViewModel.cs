@@ -55,6 +55,8 @@ namespace ECommerceApp.ViewModels
 
         public UserViewModel UserLoged { get; set; }
 
+        public CustomerItemViewModel CurrentCustomer { get; set; }
+
 
         //-> Filters
         public string ProductsFilter
@@ -114,6 +116,7 @@ namespace ECommerceApp.ViewModels
             //Create views
             NewLogin = new LoginViewModel();
             UserLoged = new UserViewModel();
+            CurrentCustomer = new CustomerItemViewModel();
 
             //Create instences service
             dataService = new DataService();
@@ -128,7 +131,7 @@ namespace ECommerceApp.ViewModels
 
         #endregion Contructors
 
-      
+
 
         public void LoadUser(User user)
         {
@@ -233,7 +236,7 @@ namespace ECommerceApp.ViewModels
             else
             {
                 products = dataService.Get<Product>(true);
-            }             
+            }
 
             ReloadProducts(products);
         }
@@ -268,7 +271,10 @@ namespace ECommerceApp.ViewModels
 
         #endregion
 
-
+        public void SetCurrentCustomer(CustomerItemViewModel customerItemViewModel)
+        {
+            CurrentCustomer = customerItemViewModel;
+        }
         #endregion Methods
 
         #region Command
@@ -278,14 +284,17 @@ namespace ECommerceApp.ViewModels
         private void SearchProduct()
         {
             var products = dataService.GetProducts(ProductsFilter);
-           ReloadProducts(products);
+            ReloadProducts(products);
 
         }
         private void SearchCustomer()
         {
-            var customers= dataService.GetCustomers(CustomersFilter);
+            var customers = dataService.GetCustomers(CustomersFilter);
             ReloadCustomers(customers);
         }
+
+
+
 
         #endregion
     }
