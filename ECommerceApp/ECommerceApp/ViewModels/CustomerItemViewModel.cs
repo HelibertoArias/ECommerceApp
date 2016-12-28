@@ -30,6 +30,7 @@ namespace ECommerceApp.ViewModels
         #region Commands
         public ICommand CustomerDetailCommand { get { return new RelayCommand(CustomerDetail); } }
 
+        #region Methods
         private async void CustomerDetail()
         {
             var customerItemViewModel = new CustomerItemViewModel
@@ -59,19 +60,24 @@ namespace ECommerceApp.ViewModels
         }
         #endregion
 
-        public CustomerItemViewModel() {
-            //
+        #region Contructor
+        public CustomerItemViewModel()
+        {
+            //--> Services
             navigationService = new NavigationService();
             netService = new NetService();
             dataService = new DataService();
             apiService = new ApiService();
 
+            //--> Listas
             Departments = new ObservableCollection<DepartmentItemViewModel>();
             Cities = new ObservableCollection<CityItemViewModel>();
 
+            //->Loading bindable pickers
             LoadDepartment();
             LoadCity();
         }
+        #endregion
 
         #region Deparment
         private async void LoadDepartment()
@@ -110,7 +116,7 @@ namespace ECommerceApp.ViewModels
         }
         #endregion
 
-        #region Deparment
+        #region City
         private async void LoadCity()
         {
             var list = new List<City>();
@@ -139,13 +145,14 @@ namespace ECommerceApp.ViewModels
                 Cities.Add(new CityItemViewModel()
                 {
                     CityId = item.CityId,
-                    Customers= item.Customers,
-                    Department=item.Department,
-                    DepartmentId=item.DepartmentId,
-                    Name=item.Name
+                    Customers = item.Customers,
+                    Department = item.Department,
+                    DepartmentId = item.DepartmentId,
+                    Name = item.Name
                 });
             }
         }
+        #endregion 
         #endregion
     }
 }
