@@ -83,9 +83,9 @@ namespace ECommerceApp.Services
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                throw new Exception(ex.Message);
             }
 
 
