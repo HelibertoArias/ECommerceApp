@@ -8,6 +8,8 @@ using System.Windows.Input;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using Xamarin.Forms.Maps;
+
 namespace ECommerceApp.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
@@ -22,6 +24,8 @@ namespace ECommerceApp.ViewModels
                 instance = new MainViewModel();
             return instance;
         }
+
+        
 
         #endregion Singleton
 
@@ -48,7 +52,7 @@ namespace ECommerceApp.ViewModels
 
         public ObservableCollection<Customer> Customers { get; set; }
 
-
+        public ObservableCollection<Pin> Pins{ get; set; }
 
 
         public LoginViewModel NewLogin { get; set; }
@@ -112,6 +116,7 @@ namespace ECommerceApp.ViewModels
             Menu = new ObservableCollection<MenuItemViewModel>();
             Products = new ObservableCollection<ProductItemViewModel>();
             Customers = new ObservableCollection<Customer>();
+            Pins = new ObservableCollection<Pin>();
 
             //Create views
             NewLogin = new LoginViewModel();
@@ -155,6 +160,40 @@ namespace ECommerceApp.ViewModels
             AddItem("ic_action_sync.png", "SyncPage", "Sincronizar");
             AddItem("ic_action_setup.png", "SetupPage", "Configuración");
             AddItem("ic_action_logout.png", "LogoutPage", "Salir");
+        }
+
+        public void GetGeolocation()
+        {
+            var position1 = new Position(6.2652880, -75.5098530);
+            var pin1 = new Pin
+            {
+                Type = PinType.Place,
+                Position = position1,
+                Label = "Pin1",
+                Address = "prueba pin1"
+            };
+            Pins.Add(pin1);
+
+            var position2 = new Position(6.2652880, -75.4598530);
+            var pin2 = new Pin
+            {
+                Type = PinType.Place,
+                Position = position2,
+                Label = "Pin2",
+                Address = "prueba pin2"
+            };
+            Pins.Add(pin2);
+
+            var position3 = new Position(6.2652880, -75.4898530);
+            var pin3 = new Pin
+            {
+                Type = PinType.Place,
+                Position = position3,
+                Label = "Pin3",
+                Address = "prueba pin3"
+            };
+            Pins.Add(pin3);
+
         }
 
 

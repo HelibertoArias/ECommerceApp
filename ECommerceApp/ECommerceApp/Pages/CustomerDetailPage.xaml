@@ -4,6 +4,8 @@
              x:Class="ECommerceApp.Pages.CustomerDetailPage"
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              xmlns:control="clr-namespace:ECommerceApp.Controls"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+
              Title="Detalles de Cliente"
              BackgroundColor="{StaticResource BackgroundColor}"
              BindingContext="{Binding Main, Source={StaticResource Locator}}">
@@ -195,7 +197,22 @@
           VerticalOptions="Center"
           HorizontalOptions="FillAndExpand">
         </Button>
+
+        
+
+
+
       </StackLayout>
+
+      <maps:Map
+          WidthRequest="400"
+          HeightRequest="400"
+          x:Name="MyMap"
+          IsShowingUser="true"
+          MapType="Hybrid">
+      </maps:Map>
+      
+      
     </StackLayout>
   </ScrollView>
 </ContentPage>
