@@ -21,8 +21,11 @@ namespace ECommerceApp.ViewModels
         #endregion
 
 
+        #region Properties
 
         public ObservableCollection<DepartmentItemViewModel> Departments { get; set; }
+        public ObservableCollection<CityItemViewModel> Cities { get; set; } 
+        #endregion
 
         #region Commands
         public ICommand CustomerDetailCommand { get { return new RelayCommand(CustomerDetail); } }
@@ -64,10 +67,13 @@ namespace ECommerceApp.ViewModels
             apiService = new ApiService();
 
             Departments = new ObservableCollection<DepartmentItemViewModel>();
+            Cities = new ObservableCollection<CityItemViewModel>();
 
             LoadDepartment();
+            LoadCity();
         }
 
+        #region Deparment
         private async void LoadDepartment()
         {
             var departaments = new List<Department>();
@@ -97,10 +103,49 @@ namespace ECommerceApp.ViewModels
                 {
                     Cities = department.Cities,
                     Customers = department.Customers,
-                    DepartmentId=department.DepartmentId,
-                    Name= department.Name
-                });  
-            }   
+                    DepartmentId = department.DepartmentId,
+                    Name = department.Name
+                });
+            }
         }
+        #endregion
+
+        #region Deparment
+        private async void LoadCity()
+        {
+            var list = new List<City>();
+
+            if (netService.IsConnected())
+            {
+                list = await apiService.Get<City>("Cities");
+                dataService.Save(list);
+            }
+            else
+            {
+                list = dataService.Get<City>(true);
+            }
+
+            ReloadCity(list);
+        }
+
+        private void ReloadCity(List<City> list)
+        {
+            Cities.Clear();
+
+            list = list.OrderBy(x => x.Name).ToList();
+
+            foreach (var item in list)
+            {
+                Cities.Add(new CityItemViewModel()
+                {
+                    CityId = item.CityId,
+                    Customers= item.Customers,
+                    Department=item.Department,
+                    DepartmentId=item.DepartmentId,
+                    Name=item.Name
+                });
+            }
+        }
+        #endregion
     }
 }
