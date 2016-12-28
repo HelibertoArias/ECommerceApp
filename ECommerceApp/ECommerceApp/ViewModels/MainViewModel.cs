@@ -34,6 +34,7 @@ namespace ECommerceApp.ViewModels
         private DataService dataService;
         private ApiService apiService;
         private NetService netService;
+        private NavigationService navigationService;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -60,6 +61,9 @@ namespace ECommerceApp.ViewModels
         public UserViewModel UserLoged { get; set; }
 
         public CustomerItemViewModel CurrentCustomer { get; set; }
+
+        public CustomerItemViewModel NewCustomer { get; set; }
+        
 
 
         //-> Filters
@@ -122,11 +126,13 @@ namespace ECommerceApp.ViewModels
             NewLogin = new LoginViewModel();
             UserLoged = new UserViewModel();
             CurrentCustomer = new CustomerItemViewModel();
+            NewCustomer = new CustomerItemViewModel();
 
             //Create instences service
             dataService = new DataService();
             apiService = new ApiService();
             netService = new NetService();
+            navigationService = new NavigationService();
 
             LoadMenu();
             LoadProducts();
@@ -162,38 +168,18 @@ namespace ECommerceApp.ViewModels
             AddItem("ic_action_logout.png", "LogoutPage", "Salir");
         }
 
-        public void GetGeolocation()
+        public void SetGeolocation(string name, string address, double latitude, double longitude)
         {
-            var position1 = new Position(6.2652880, -75.5098530);
+            var position1 = new Position(latitude, longitude);
             var pin1 = new Pin
             {
                 Type = PinType.Place,
                 Position = position1,
-                Label = "Pin1",
-                Address = "prueba pin1"
+                Label = name,
+                Address = address
             };
             Pins.Add(pin1);
-
-            var position2 = new Position(6.2652880, -75.4598530);
-            var pin2 = new Pin
-            {
-                Type = PinType.Place,
-                Position = position2,
-                Label = "Pin2",
-                Address = "prueba pin2"
-            };
-            Pins.Add(pin2);
-
-            var position3 = new Position(6.2652880, -75.4898530);
-            var pin3 = new Pin
-            {
-                Type = PinType.Place,
-                Position = position3,
-                Label = "Pin3",
-                Address = "prueba pin3"
-            };
-            Pins.Add(pin3);
-
+            
         }
 
 
@@ -319,6 +305,7 @@ namespace ECommerceApp.ViewModels
         #region Command
         public ICommand SearchProductCommand { get { return new RelayCommand(SearchProduct); } }
         public ICommand SearchCustomerCommand { get { return new RelayCommand(SearchCustomer); } }
+        public ICommand NewCustomerCommand { get { return new RelayCommand(CustomerNew); } }
 
         private void SearchProduct()
         {
@@ -332,7 +319,10 @@ namespace ECommerceApp.ViewModels
             ReloadCustomers(customers);
         }
 
-
+        private async void CustomerNew()
+        {
+             await navigationService.Navigate("NewCustomerPage");
+        }
 
 
         #endregion

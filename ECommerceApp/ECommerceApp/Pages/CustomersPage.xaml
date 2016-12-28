@@ -22,4 +22,9 @@
     </ListView>
   </StackLayout>
   
+<ContentPage.ToolbarItems>
+  <ToolbarItem Icon="ic_action_content_add_circle_outline" 
+    Command="{Binding NewCustomerCommand}"/>
+        
+</ContentPage.ToolbarItems>
 </ContentPage>
