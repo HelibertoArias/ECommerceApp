@@ -11,7 +11,7 @@
   <ScrollView
       BindingContext="{Binding NewCustomer}">
       
-    <!--<StackLayout Orientation="Vertical"
+    <StackLayout Orientation="Vertical"
       Padding="8">
 
       <controls:CircleImage
@@ -21,7 +21,7 @@
         HeightRequest="200">
       </controls:CircleImage>
 
-    </StackLayout>
+   
     <StackLayout
       Orientation="Horizontal">
       <Label
@@ -159,10 +159,10 @@
 
 
 
-    </StackLayout>-->
+    </StackLayout>
 
 
-
+    </StackLayout>
 
 
   </ScrollView>
