@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using ECommerceApp.Models;
 using ECommerceApp.ViewModels;
+using System.IO;
 
 namespace ECommerceApp
 {
@@ -31,6 +32,7 @@ namespace ECommerceApp
             //Teresas mode
             dataService = new DataService();
 
+          
 
             var user = dataService.GetUser();
 

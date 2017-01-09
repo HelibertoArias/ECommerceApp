@@ -7,16 +7,23 @@ using System;
 using System.Collections.Generic;
 using ECommerceApp.Data;
 using System.Linq;
+using System.ComponentModel;
+using Xamarin.Forms;
+using Plugin.Media;
 
 namespace ECommerceApp.ViewModels
 {
-    public class CustomerItemViewModel : Customer
+    public class CustomerItemViewModel : Customer, INotifyPropertyChanged
     {
         #region Attributes
         private NavigationService navigationService;
         private NetService netService;
         private ApiService apiService;
         private DataService dataService;
+        private DialogService dialogService;
+
+        private ImageSource imageSource;
+
 
         #endregion
 
@@ -24,12 +31,58 @@ namespace ECommerceApp.ViewModels
         #region Properties
 
         public ObservableCollection<DepartmentItemViewModel> Departments { get; set; }
-        public ObservableCollection<CityItemViewModel> Cities { get; set; } 
+        public ObservableCollection<CityItemViewModel> Cities { get; set; }
+
+
+        public ImageSource ImageSource
+        {
+            set {
+                if(imageSource != value)
+                {
+                    imageSource = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ImageSource"));
+                }
+                
+            }
+            get { return imageSource; }
+        }
+        #endregion
+
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
 
         #region Commands
         public ICommand CustomerDetailCommand { get { return new RelayCommand(CustomerDetail); } }
 
+        public ICommand TakePictureCommand { get { return new RelayCommand(TakePicture); } }
+
+        private async void TakePicture()
+        {
+           // await CrossMedia.Current.Initialize();
+
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                await dialogService.ShowMessage("No Camera", ":( No camera available.");                
+            }
+            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                Directory = "Photos",
+                Name = "NewCustomer.jpg"
+            });
+
+            if (file != null)
+            {
+                ImageSource = ImageSource.FromStream(() =>
+                {
+                    var stream = file.GetStream();
+                    file.Dispose();
+                    return stream;
+                });
+            }
+
+        }
         #region Methods
         private async void CustomerDetail()
         {
@@ -69,6 +122,7 @@ namespace ECommerceApp.ViewModels
             dataService = new DataService();
             apiService = new ApiService();
 
+            dialogService = new DialogService();
             //--> Listas
             Departments = new ObservableCollection<DepartmentItemViewModel>();
             Cities = new ObservableCollection<CityItemViewModel>();

@@ -29,7 +29,7 @@ namespace ECommerceApp.ViewModels
 
         #endregion Singleton
 
-        #region Attribute
+            #region Attribute
 
         private DataService dataService;
         private ApiService apiService;
