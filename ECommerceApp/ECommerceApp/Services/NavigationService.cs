@@ -85,5 +85,10 @@ namespace ECommerceApp.Services
             App.CurrentUser = user;
             App.Current.MainPage = new MasterPage();
         }
+
+        public async Task Back()
+        {
+            await App.Navigator.PopAsync();
+        }
     }
 }

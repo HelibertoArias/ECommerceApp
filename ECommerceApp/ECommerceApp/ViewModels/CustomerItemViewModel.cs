@@ -21,8 +21,11 @@ namespace ECommerceApp.ViewModels
         private ApiService apiService;
         private DataService dataService;
         private DialogService dialogService;
+        private GeolocatorService geoLocatorService;
+
 
         private ImageSource imageSource;
+        private bool isRunning;
 
 
         #endregion
@@ -46,6 +49,20 @@ namespace ECommerceApp.ViewModels
             }
             get { return imageSource; }
         }
+
+        public bool IsRunning
+        {
+            set
+            {
+                if (isRunning != value)
+                {
+                    isRunning = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
+                }
+
+            }
+            get { return isRunning; }
+        }
         #endregion
 
         #region Events
@@ -60,6 +77,7 @@ namespace ECommerceApp.ViewModels
 
         private async void TakePicture()
         {
+            IsRunning = true;
            // await CrossMedia.Current.Initialize();
 
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
@@ -81,6 +99,8 @@ namespace ECommerceApp.ViewModels
                     return stream;
                 });
             }
+
+            IsRunning = false;
 
         }
         #region Methods
@@ -113,6 +133,103 @@ namespace ECommerceApp.ViewModels
         }
         #endregion
 
+        private async void NewCustomer() {
+
+            //--Valide formato email
+          
+            if (string.IsNullOrEmpty(UserName))
+            {
+                await dialogService.ShowMessage("Error", "Debe ingresar correo");
+                return;
+            }
+        
+            if (string.IsNullOrEmpty(LastName))
+            {
+                await dialogService.ShowMessage("Error", "Debe ingresar apellidos");
+                return;
+            }
+            
+            if (string.IsNullOrEmpty(FirstName))
+            {
+                await dialogService.ShowMessage("Error", "Debe ingresar nombres");
+                return;
+            }
+            
+            if (string.IsNullOrEmpty(Phone))
+            {
+                await dialogService.ShowMessage("Error", "Debe ingresar teléfono");
+                return;
+            }
+
+            
+            if (string.IsNullOrEmpty(Address))
+            {
+                await dialogService.ShowMessage("Error", "Debe ingresar direcciòn");
+                return;
+            }
+            
+            if (DepartmentId==0)
+            {
+                await dialogService.ShowMessage("Error", "Debe seleccionar un departamento");
+                return;
+            }
+            
+            if (CityId==0)
+            {
+                await dialogService.ShowMessage("Error", "Debe seleccionar una ciudad");
+                return;
+            }
+            IsRunning = true;
+            await geoLocatorService.GetLocatocation();
+
+            var customer = new Customer() {
+                Address = Address,
+                CityId = CityId,
+                DepartmentId = DepartmentId,
+                FirstName = FirstName,
+                IsUpdated = true,
+                LastName = LastName,
+                Latitude = geoLocatorService.Latitude,
+                Longitude = geoLocatorService.Longitude,
+                Phone = Phone,
+                UserName = UserName,
+                
+            };
+
+            var response = await apiService.NewCustomer(customer);
+            IsRunning = false;
+
+            if (response.IsSuccess) {
+                await dialogService.ShowMessage("Error", response.Message);
+                return;
+            }
+
+            await dialogService.ShowMessage("Confirmación", response.Message);
+
+            await navigationService.Back();
+            
+
+
+        }
+
+
+        //private async void ValidateField(string text, string messageError) {
+        //    if (string.IsNullOrEmpty(text)) {
+        //        await dialogService.ShowMessage("Error", messageError);
+        //        return;
+        //    }
+        //}
+
+        //private async void ValidateFieldInt(int val, string messageError)
+        //{
+        //    if (val==0)
+        //    {
+        //        await dialogService.ShowMessage("Error", messageError);
+        //        return;
+        //    }
+        //}
+
+
         #region Contructor
         public CustomerItemViewModel()
         {
@@ -121,6 +238,7 @@ namespace ECommerceApp.ViewModels
             netService = new NetService();
             dataService = new DataService();
             apiService = new ApiService();
+            geoLocatorService = new GeolocatorService();
 
             dialogService = new DialogService();
             //--> Listas
