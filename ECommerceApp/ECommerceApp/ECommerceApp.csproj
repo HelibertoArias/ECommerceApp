@@ -60,6 +60,7 @@
     <Compile Include="Data\DataAccess.cs" />
     <Compile Include="Data\DataService.cs" />
     <Compile Include="Infrastructure\InstanceLocator.cs" />
+    <Compile Include="Infrastructure\Utilities.cs" />
     <Compile Include="Interfaces\IConfig.cs" />
     <Compile Include="Interfaces\INetworkConnection.cs" />
     <Compile Include="Models\Category.cs" />

@@ -135,50 +135,50 @@ namespace ECommerceApp.ViewModels
 
         private async void NewCustomer() {
 
-            //--Valide formato email
-          
-            if (string.IsNullOrEmpty(UserName))
+
+            if (!Utilities.IsValidEmail(UserName))
             {
-                await dialogService.ShowMessage("Error", "Debe ingresar correo");
-                return;
-            }
-        
-            if (string.IsNullOrEmpty(LastName))
-            {
-                await dialogService.ShowMessage("Error", "Debe ingresar apellidos");
-                return;
-            }
-            
-            if (string.IsNullOrEmpty(FirstName))
-            {
-                await dialogService.ShowMessage("Error", "Debe ingresar nombres");
-                return;
-            }
-            
-            if (string.IsNullOrEmpty(Phone))
-            {
-                await dialogService.ShowMessage("Error", "Debe ingresar teléfono");
+                await dialogService.ShowMessage("error", "Debe ingresar un email");
                 return;
             }
 
-            
+            if (string.IsNullOrEmpty(FirstName))
+            {
+                await dialogService.ShowMessage("error", "Debe ingresar nombres");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(LastName))
+            {
+                await dialogService.ShowMessage("error", "Debe ingresar apellidos");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(Phone))
+            {
+                await dialogService.ShowMessage("error", "Debe ingresar telefono");
+                return;
+            }
+
             if (string.IsNullOrEmpty(Address))
             {
-                await dialogService.ShowMessage("Error", "Debe ingresar direcciòn");
+                await dialogService.ShowMessage("error", "Debe ingresar dirección");
                 return;
             }
-            
-            if (DepartmentId==0)
+
+            if (DepartmentId == 0)
             {
-                await dialogService.ShowMessage("Error", "Debe seleccionar un departamento");
+                await dialogService.ShowMessage("error", "Debe seleccionar un departamento");
                 return;
             }
-            
-            if (CityId==0)
+
+            if (CityId == 0)
             {
-                await dialogService.ShowMessage("Error", "Debe seleccionar una ciudad");
+                await dialogService.ShowMessage("error", "Debe seleccionar una ciudad");
                 return;
             }
+
+
             IsRunning = true;
             await geoLocatorService.GetLocatocation();
 
