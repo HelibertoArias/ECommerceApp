@@ -10,12 +10,21 @@ namespace ECommerceApp.Services
 
         public async Task GetLocatocation()
         {
-            var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 50;
+            try
+            {
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 50;
 
-            var location = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-            Latitude = location.Latitude;
-            Longitude = location.Longitude;
+                var location = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                Latitude = location.Latitude;
+                Longitude = location.Longitude;
+
+            }
+            catch (System.Exception ex)
+            {
+
+                return;
+            }
         }
     }
 }

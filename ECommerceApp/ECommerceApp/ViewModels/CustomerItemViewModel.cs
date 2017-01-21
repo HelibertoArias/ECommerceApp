@@ -10,6 +10,7 @@ using System.Linq;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Plugin.Media;
+using ECommerceApp.Infrastructure;
 
 namespace ECommerceApp.ViewModels
 {
@@ -28,6 +29,7 @@ namespace ECommerceApp.ViewModels
         private bool isRunning;
 
 
+
         #endregion
 
 
@@ -40,12 +42,12 @@ namespace ECommerceApp.ViewModels
         public ImageSource ImageSource
         {
             set {
-                if(imageSource != value)
+                if (imageSource != value)
                 {
                     imageSource = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ImageSource"));
                 }
-                
+
             }
             get { return imageSource; }
         }
@@ -63,6 +65,8 @@ namespace ECommerceApp.ViewModels
             }
             get { return isRunning; }
         }
+
+       
         #endregion
 
         #region Events
@@ -74,6 +78,11 @@ namespace ECommerceApp.ViewModels
         public ICommand CustomerDetailCommand { get { return new RelayCommand(CustomerDetail); } }
 
         public ICommand TakePictureCommand { get { return new RelayCommand(TakePicture); } }
+
+        public ICommand NewCustomerCommand { get { return new RelayCommand(NewCustomer); } }
+
+        //public ICommand RefreshCommandCommand { get { return new RelayCommand(RefreshCommand); } }
+
 
         private async void TakePicture()
         {
@@ -133,12 +142,13 @@ namespace ECommerceApp.ViewModels
         }
         #endregion
 
+
         private async void NewCustomer() {
 
 
-            if (!Utilities.IsValidEmail(UserName))
+            if (string.IsNullOrEmpty(UserName))
             {
-                await dialogService.ShowMessage("error", "Debe ingresar un email");
+                await dialogService.ShowMessage("error", "Debe ingresar email");
                 return;
             }
 
@@ -199,7 +209,7 @@ namespace ECommerceApp.ViewModels
             var response = await apiService.NewCustomer(customer);
             IsRunning = false;
 
-            if (response.IsSuccess) {
+            if (!response.IsSuccess) {
                 await dialogService.ShowMessage("Error", response.Message);
                 return;
             }

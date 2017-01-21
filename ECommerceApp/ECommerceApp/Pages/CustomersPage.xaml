@@ -17,8 +17,11 @@
     <ListView
       ItemsSource="{Binding Customers}"
       HasUnevenRows="True"
-      ItemTemplate="{StaticResource CustomerItemTemplate}">
-
+      ItemTemplate="{StaticResource CustomerItemTemplate}"
+      IsPullToRefreshEnabled="True"
+      RefreshCommand="{Binding RefreshCustomersCommand}"
+      IsRefreshing="{Binding IsRefreshingCustomers, Mode=TwoWay}">
+      
     </ListView>
   </StackLayout>
   

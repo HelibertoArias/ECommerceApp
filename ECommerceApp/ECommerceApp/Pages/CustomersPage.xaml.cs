@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECommerceApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,15 @@ namespace ECommerceApp.Pages
         public CustomersPage()
         {
             InitializeComponent();
+
+            //Refresh list after insert a new customer
+            var main = (MainViewModel)BindingContext;
+            Appearing += (object sender, EventArgs e) =>
+            {
+                main.RefreshCustomersCommand.Execute(this);
+            };
         }
+
+      
     }
 }

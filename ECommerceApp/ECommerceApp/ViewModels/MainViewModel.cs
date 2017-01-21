@@ -42,6 +42,11 @@ namespace ECommerceApp.ViewModels
         private string productsFilter;
         private string customersFilter;
 
+       
+        private bool isRefreshingCustomers=false   ;
+
+       //  IsRefreshingCustomers
+
         #endregion Attribute
 
         #region Properties
@@ -105,6 +110,20 @@ namespace ECommerceApp.ViewModels
                 }
             }
             get { return customersFilter; }
+        }
+
+        public bool IsRefreshingCustomers
+        {
+            set
+            {
+                if (isRefreshingCustomers != value)
+                {
+                    isRefreshingCustomers = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRefreshingCustomers"));
+                }
+
+            }
+            get { return isRefreshingCustomers; }
         }
 
         #endregion Properties
@@ -304,15 +323,21 @@ namespace ECommerceApp.ViewModels
 
         #region Command
         public ICommand SearchProductCommand { get { return new RelayCommand(SearchProduct); } }
-        public ICommand SearchCustomerCommand { get { return new RelayCommand(SearchCustomer); } }
-        public ICommand NewCustomerCommand { get { return new RelayCommand(CustomerNew); } }
 
+        public ICommand SearchCustomerCommand { get { return new RelayCommand(SearchCustomer); } }
+
+        public ICommand NewCustomerCommand { get { return new RelayCommand(CustomerNew); } }
+   
+
+        public ICommand RefreshCustomersCommand { get { return new RelayCommand(RefreshCustomers); } }
+      
         private void SearchProduct()
         {
             var products = dataService.GetProducts(ProductsFilter);
             ReloadProducts(products);
 
         }
+
         private void SearchCustomer()
         {
             var customers = dataService.GetCustomers(CustomersFilter);
@@ -322,6 +347,14 @@ namespace ECommerceApp.ViewModels
         private async void CustomerNew()
         {
              await navigationService.Navigate("NewCustomerPage");
+        }
+
+
+        private async void RefreshCustomers()
+        {
+            var customers = await apiService.Get<Customer>("Customers");
+            ReloadCustomers(customers);
+            IsRefreshingCustomers = false;
         }
 
 
