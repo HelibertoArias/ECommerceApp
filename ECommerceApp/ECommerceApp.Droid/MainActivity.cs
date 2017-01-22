@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Plugin.Permissions;
+using ZXing.Mobile;
 
 namespace ECommerceApp.Droid
 {
@@ -16,6 +17,8 @@ namespace ECommerceApp.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            //--> Add reference to barcode scanner
+            MobileBarcodeScanner.Initialize(this.Application);
             LoadApplication(new App());
         }
 

@@ -35,6 +35,7 @@ namespace ECommerceApp.ViewModels
         private ApiService apiService;
         private NetService netService;
         private NavigationService navigationService;
+        private ScanService scanService;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -152,6 +153,7 @@ namespace ECommerceApp.ViewModels
             apiService = new ApiService();
             netService = new NetService();
             navigationService = new NavigationService();
+            scanService = new ScanService();
 
             LoadMenu();
             LoadProducts();
@@ -330,12 +332,13 @@ namespace ECommerceApp.ViewModels
    
 
         public ICommand RefreshCustomersCommand { get { return new RelayCommand(RefreshCustomers); } }
-      
+
+        public ICommand SearchScanProductCommand { get { return new RelayCommand(SearchScanProduct); } }
+
         private void SearchProduct()
         {
             var products = dataService.GetProducts(ProductsFilter);
             ReloadProducts(products);
-
         }
 
         private void SearchCustomer()
@@ -349,7 +352,6 @@ namespace ECommerceApp.ViewModels
              await navigationService.Navigate("NewCustomerPage");
         }
 
-
         private async void RefreshCustomers()
         {
             var customers = await apiService.Get<Customer>("Customers");
@@ -357,6 +359,11 @@ namespace ECommerceApp.ViewModels
             IsRefreshingCustomers = false;
         }
 
+        private async void SearchScanProduct()
+        {
+            ProductsFilter =await scanService.Scanner();
+            SearchProduct();
+        }
 
         #endregion
     }

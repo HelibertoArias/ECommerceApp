@@ -12,7 +12,19 @@
        Text="{Binding ProductsFilter, Mode=TwoWay}"
        SearchCommand="{Binding SearchProductCommand}">
     </SearchBar>
-    
+    <Image
+      Source="ic_action_barcode.png"
+      HorizontalOptions="End"
+      VerticalOptions="Center">
+      <Image.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding SearchScanProductCommand}" />
+      </Image.GestureRecognizers>
+
+
+       
+      
+      
+    </Image>
     <ListView      
       ItemsSource="{Binding Products}"
       HasUnevenRows="True"

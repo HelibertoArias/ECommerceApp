@@ -136,7 +136,8 @@ namespace ECommerceApp.Data
             using (var dat = new DataAccess())
             {
                 return dat.GetList<Product>(true)
-                    .Where(p => p.Description.ToUpper().Contains(filter.ToUpper()))
+                    .Where(p => p.Description.ToUpper().Contains(filter.ToUpper())  || 
+                            p.BarCode.Contains(filter))
                     .OrderBy(x => x.Description)
                     .ToList();
             }
