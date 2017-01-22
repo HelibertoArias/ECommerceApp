@@ -30,6 +30,9 @@ namespace ECommerceApp.ViewModels
         private bool isRunning;
         private MediaFile file;
 
+        private double latitude;
+        private double longitude;
+
 
 
         #endregion
@@ -54,6 +57,40 @@ namespace ECommerceApp.ViewModels
             }
             get { return imageSource; }
         }
+
+
+        
+
+        public new double Latitude
+        {
+            set
+            {
+                if (latitude != value)
+                {
+                    latitude = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Latitude"));
+                }
+
+            }
+            get { return latitude; }
+        }
+
+        
+
+        public new double Longitude
+        {
+            set
+            {
+                if (longitude != value)
+                {
+                    longitude = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
+                }
+
+            }
+            get{ return longitude; }
+        }
+
 
         public bool IsRunning
         {
@@ -84,8 +121,9 @@ namespace ECommerceApp.ViewModels
 
         public ICommand NewCustomerCommand { get { return new RelayCommand(NewCustomer); } }
 
-        //public ICommand RefreshCommandCommand { get { return new RelayCommand(RefreshCommand); } }
+        public ICommand UpdateCustomerLocationCommand { get { return new RelayCommand(UpdateCustomerLocation); } }
 
+       
 
         private async void TakePicture()
         {
@@ -118,7 +156,7 @@ namespace ECommerceApp.ViewModels
             IsRunning = false;
 
         }
-        #region Methods
+      
         private async void CustomerDetail()
         {
             var customerItemViewModel = new CustomerItemViewModel
@@ -145,10 +183,8 @@ namespace ECommerceApp.ViewModels
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.SetCurrentCustomer(customerItemViewModel);
             await navigationService.Navigate("CustomerDetailPage");
-        }
-        #endregion
-
-
+        }     
+        
         private async void NewCustomer()
         {
 
@@ -227,7 +263,7 @@ namespace ECommerceApp.ViewModels
                 var fullPath = System.IO.Path.Combine(folder, fileName);
                 customer.Photo = fullPath;
 
-                var response3 = await apiService.UpdateCustomer(customer);
+                var response3 = await apiService.Update< Customer>(customer, "Customers");
             } 
 
 
@@ -248,9 +284,35 @@ namespace ECommerceApp.ViewModels
 
         }
 
+        private async void UpdateCustomerLocation()
+        {
+            IsRunning = true;
+            await geoLocatorService.GetLocatocation();
 
+            var customer = dataService.Get<Customer>(false)
+                                .Where(c => c.UserName.Equals(UserName, StringComparison.OrdinalIgnoreCase))
+                                .FirstOrDefault();
 
+            if(customer!=null && geoLocatorService.Latitude!=0 && geoLocatorService.Longitude != 0
+                 
+                )
+            {
+             
+                Latitude = geoLocatorService.Latitude;
+                Longitude = geoLocatorService.Longitude;
 
+                customer.Latitude = geoLocatorService.Latitude;
+                customer.Longitude = geoLocatorService.Longitude;
+                dataService.Update(customer);
+                var response = await apiService.Update<Customer>(customer, "Customers");
+
+            }
+
+            IsRunning = false;
+        }
+
+  #region Methods
+        #endregion
 
         #region Contructor
         public CustomerItemViewModel()

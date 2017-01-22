@@ -187,6 +187,22 @@ namespace ECommerceApp.Data
             }
         }
 
+        public T Find<T>(int pk, bool withChildren) where T :class
+        {
+            using (var da= new DataAccess())
+            {
+                return da.Find<T>(pk, withChildren);
+            }
+        }
+
+        public void Update<T>(T model) 
+        {
+            using (var da = new DataAccess())
+            {
+                da.Update(model);
+            }
+        }
+
 
         #endregion
 
