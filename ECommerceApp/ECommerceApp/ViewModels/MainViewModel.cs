@@ -145,7 +145,7 @@ namespace ECommerceApp.ViewModels
             NewLogin = new LoginViewModel();
             UserLoged = new UserViewModel();
             CurrentCustomer = new CustomerItemViewModel();
-            NewCustomer = new CustomerItemViewModel();
+            NewCustomer = new CustomerItemViewModel() { UserName= "aaabbb@gmail.com", Phone="ss", FirstName="aaa", LastName="bbb", Address="dir", CityId=19, DepartmentId=15};
 
             //Create instences service
             dataService = new DataService();

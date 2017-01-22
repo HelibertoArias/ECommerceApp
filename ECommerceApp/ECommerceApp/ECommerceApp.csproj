@@ -119,6 +119,7 @@
     <Compile Include="Services\GeolocatorService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\NetService.cs" />
+    <Compile Include="Services\PhotoRequest.cs" />
     <Compile Include="ViewModels\CityItemViewModel.cs" />
     <Compile Include="ViewModels\CustomerItemViewModel.cs" />
     <Compile Include="ViewModels\DepartmentItemViewModel.cs" />

@@ -11,6 +11,7 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Plugin.Media;
 using ECommerceApp.Infrastructure;
+using Plugin.Media.Abstractions;
 
 namespace ECommerceApp.ViewModels
 {
@@ -27,6 +28,7 @@ namespace ECommerceApp.ViewModels
 
         private ImageSource imageSource;
         private bool isRunning;
+        private MediaFile file;
 
 
 
@@ -41,7 +43,8 @@ namespace ECommerceApp.ViewModels
 
         public ImageSource ImageSource
         {
-            set {
+            set
+            {
                 if (imageSource != value)
                 {
                     imageSource = value;
@@ -66,7 +69,7 @@ namespace ECommerceApp.ViewModels
             get { return isRunning; }
         }
 
-       
+
         #endregion
 
         #region Events
@@ -87,24 +90,27 @@ namespace ECommerceApp.ViewModels
         private async void TakePicture()
         {
             IsRunning = true;
-           // await CrossMedia.Current.Initialize();
+            //await CrossMedia.Current.Initialize();
 
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
             {
-                await dialogService.ShowMessage("No Camera", ":( No camera available.");                
+                await dialogService.ShowMessage("No Camera", ":( No camera available.");
             }
-            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 Directory = "Photos",
                 Name = "NewCustomer.jpg"
             });
+
+            if (file == null)
+                return;
 
             if (file != null)
             {
                 ImageSource = ImageSource.FromStream(() =>
                 {
                     var stream = file.GetStream();
-                    file.Dispose();
+                   // file.Dispose(); Sin esto se puede acc
                     return stream;
                 });
             }
@@ -143,7 +149,8 @@ namespace ECommerceApp.ViewModels
         #endregion
 
 
-        private async void NewCustomer() {
+        private async void NewCustomer()
+        {
 
 
             if (string.IsNullOrEmpty(UserName))
@@ -192,7 +199,10 @@ namespace ECommerceApp.ViewModels
             IsRunning = true;
             await geoLocatorService.GetLocatocation();
 
-            var customer = new Customer() {
+
+            var files = file.GetStream();
+            var customer = new Customer()
+            {
                 Address = Address,
                 CityId = CityId,
                 DepartmentId = DepartmentId,
@@ -203,13 +213,29 @@ namespace ECommerceApp.ViewModels
                 Longitude = geoLocatorService.Longitude,
                 Phone = Phone,
                 UserName = UserName,
-                
+
             };
 
+
             var response = await apiService.NewCustomer(customer);
+            if (response.IsSuccess && file != null)
+            {
+                customer = (Customer)response.Result;
+                var response2 = await apiService.SetPhoto(customer.CustomerId, file.GetStream());
+                var fileName = $"{customer.CustomerId}.jpg";
+                var folder = "~/Content/Customers";
+                var fullPath = System.IO.Path.Combine(folder, fileName);
+                customer.Photo = fullPath;
+
+                var response3 = await apiService.UpdateCustomer(customer);
+            } 
+
+
+
             IsRunning = false;
 
-            if (!response.IsSuccess) {
+            if (!response.IsSuccess)
+            {
                 await dialogService.ShowMessage("Error", response.Message);
                 return;
             }
@@ -217,27 +243,13 @@ namespace ECommerceApp.ViewModels
             await dialogService.ShowMessage("Confirmación", response.Message);
 
             await navigationService.Back();
-            
+
 
 
         }
 
 
-        //private async void ValidateField(string text, string messageError) {
-        //    if (string.IsNullOrEmpty(text)) {
-        //        await dialogService.ShowMessage("Error", messageError);
-        //        return;
-        //    }
-        //}
 
-        //private async void ValidateFieldInt(int val, string messageError)
-        //{
-        //    if (val==0)
-        //    {
-        //        await dialogService.ShowMessage("Error", messageError);
-        //        return;
-        //    }
-        //}
 
 
         #region Contructor

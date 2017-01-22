@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ECommerceApp.Services
 {
@@ -135,6 +136,110 @@ namespace ECommerceApp.Services
                 };
             }
 
+        }
+
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+
+
+        public async Task<Response> SetPhoto(int customerId, Stream stream)
+        {
+            try
+            {
+                var array = ReadFully(stream);
+
+                var photoRequest = new PhotoRequest
+                {
+                    Id = customerId,
+                    Array = array,
+                };
+
+                var request = JsonConvert.SerializeObject(photoRequest);
+                var body = new StringContent(request, Encoding.UTF8, "application/json");
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("http://zulu-software.com");
+                var url = "/ECommerce/api/Customers/SetPhoto";
+                var response = await client.PostAsync(url, body);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = response.StatusCode.ToString(),
+                    };
+                }
+
+                return new Response
+                {
+                    IsSuccess = true,
+                    Message = "Foto asignada Ok",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+            }
+
+        }
+
+        public async Task<Response> UpdateCustomer(Customer customer)
+        {
+            try
+            {
+                var request = JsonConvert.SerializeObject(customer);
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://zulu-software.com");
+                    var url = $"/Ecommerce/api/Customers/{customer.CustomerId}";
+                    var response = await client.PutAsync(url, content);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new Response
+                        {
+                            IsSuccess = false,
+                            Message = response.StatusCode.ToString()
+                        };
+                    }
+
+                    var result = await response.Content.ReadAsStringAsync();
+                    var newcustomer = JsonConvert.DeserializeObject<Customer>(result);
+
+                    return new Response
+                    {
+                        IsSuccess = true,
+                        Message = "Cliente actualizado oK",
+                        Result = newcustomer
+                    };
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
     }
 }
