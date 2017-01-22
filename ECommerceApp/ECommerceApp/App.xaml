@@ -29,9 +29,6 @@
               <ColumnDefinition Width="Auto"></ColumnDefinition>
               <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-
-          
-            
             <Image
               Source="{Binding ImageFullPath}"
               VerticalOptions="Start"
@@ -95,6 +92,39 @@
           </Grid>
         </ViewCell>
       </DataTemplate>
+
+      <DataTemplate x:Key="OrderItemTemplate">
+        <ViewCell>
+          <Grid>
+            <Grid.GestureRecognizers>
+              <TapGestureRecognizer Command="{Binding OrderDetailCommand}"/>
+            </Grid.GestureRecognizers>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"></ColumnDefinition>
+              <ColumnDefinition Width="*"></ColumnDefinition>
+              <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label
+              FontAttributes="Bold"
+              VerticalOptions="Center"
+              TextColor="{StaticResource FontColor}"
+              Text="{Binding Date, StringFormat='{0:yyyy/MM/dd}'}">
+            </Label>
+            <Label
+              Grid.Column="1"
+              VerticalOptions="Center"
+              TextColor="{StaticResource FontColor}"
+              Text="{Binding Customer.FullName}"/>
+            <Label
+              Grid.Column="2"
+              VerticalOptions="Center"
+              TextColor="{StaticResource FontColor}"
+              Text="{Binding State.Description}"/>
+          </Grid>
+        </ViewCell>
+      </DataTemplate>
+
+
       <!--Data templates : End-->
 
     </ResourceDictionary>

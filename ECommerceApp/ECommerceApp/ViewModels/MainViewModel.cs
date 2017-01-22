@@ -25,11 +25,11 @@ namespace ECommerceApp.ViewModels
             return instance;
         }
 
-        
+
 
         #endregion Singleton
 
-            #region Attribute
+        #region Attribute
 
         private DataService dataService;
         private ApiService apiService;
@@ -43,10 +43,10 @@ namespace ECommerceApp.ViewModels
         private string productsFilter;
         private string customersFilter;
 
-       
-        private bool isRefreshingCustomers=false   ;
 
-       //  IsRefreshingCustomers
+        private bool isRefreshingCustomers = false;
+
+        //  IsRefreshingCustomers
 
         #endregion Attribute
 
@@ -59,7 +59,9 @@ namespace ECommerceApp.ViewModels
 
         public ObservableCollection<Customer> Customers { get; set; }
 
-        public ObservableCollection<Pin> Pins{ get; set; }
+        public ObservableCollection<Pin> Pins { get; set; }
+
+        public ObservableCollection<OrderItemViewModel> Orders { get; set; }
 
 
         public LoginViewModel NewLogin { get; set; }
@@ -69,7 +71,7 @@ namespace ECommerceApp.ViewModels
         public CustomerItemViewModel CurrentCustomer { get; set; }
 
         public CustomerItemViewModel NewCustomer { get; set; }
-        
+
 
 
         //-> Filters
@@ -141,12 +143,13 @@ namespace ECommerceApp.ViewModels
             Products = new ObservableCollection<ProductItemViewModel>();
             Customers = new ObservableCollection<Customer>();
             Pins = new ObservableCollection<Pin>();
+            Orders = new ObservableCollection<OrderItemViewModel>();
 
             //Create views
             NewLogin = new LoginViewModel();
             UserLoged = new UserViewModel();
             CurrentCustomer = new CustomerItemViewModel();
-            NewCustomer = new CustomerItemViewModel() { UserName= "aaabbb@gmail.com", Phone="ss", FirstName="aaa", LastName="bbb", Address="dir", CityId=19, DepartmentId=15};
+            NewCustomer = new CustomerItemViewModel() { UserName = "aaabbb@gmail.com", Phone = "ss", FirstName = "aaa", LastName = "bbb", Address = "dir", CityId = 19, DepartmentId = 15 };
 
             //Create instences service
             dataService = new DataService();
@@ -158,8 +161,10 @@ namespace ECommerceApp.ViewModels
             LoadMenu();
             LoadProducts();
             LoadCustomers();
+            LoadOrders();
         }
 
+      
 
         #endregion Contructors
 
@@ -200,7 +205,7 @@ namespace ECommerceApp.ViewModels
                 Address = address
             };
             Pins.Add(pin1);
-            
+
         }
 
 
@@ -317,6 +322,51 @@ namespace ECommerceApp.ViewModels
 
         #endregion
 
+        #region Orders
+        private async void LoadOrders()
+        {
+
+            var list = new List<Order>();
+
+            if (netService.IsConnected())
+            {
+                list = await apiService.Get<Order>("Orders");
+                dataService.Save<Order>(list);
+            }
+            else
+            {
+                list = dataService.Get<Order>(true);
+            }
+
+            ReloadOrders(list);
+        }
+
+        private void ReloadOrders(List<Order> list)
+        {
+            Orders.Clear();
+            
+
+            foreach (var order in list.OrderByDescending(o=>o.Date))
+            {
+                Orders.Add(new OrderItemViewModel()
+                {
+                    Company= order.Company,
+                    Customer = order.Customer,
+                    CustomerId = order.CustomerId,
+                    CompanyId= order.CompanyId,
+                     Date = order.Date,
+                     IsUpdated= true,
+                     OrderDetails = order.OrderDetails,
+                     OrderId= order.OrderId,
+                     Remarks = order.Remarks,
+                     State= order.State,
+                     StateId = order.StateId
+                });
+            }
+        }
+        #endregion
+
+
         public void SetCurrentCustomer(CustomerItemViewModel customerItemViewModel)
         {
             CurrentCustomer = customerItemViewModel;
@@ -329,7 +379,7 @@ namespace ECommerceApp.ViewModels
         public ICommand SearchCustomerCommand { get { return new RelayCommand(SearchCustomer); } }
 
         public ICommand NewCustomerCommand { get { return new RelayCommand(CustomerNew); } }
-   
+
 
         public ICommand RefreshCustomersCommand { get { return new RelayCommand(RefreshCustomers); } }
 
@@ -349,7 +399,7 @@ namespace ECommerceApp.ViewModels
 
         private async void CustomerNew()
         {
-             await navigationService.Navigate("NewCustomerPage");
+            await navigationService.Navigate("NewCustomerPage");
         }
 
         private async void RefreshCustomers()
@@ -361,7 +411,7 @@ namespace ECommerceApp.ViewModels
 
         private async void SearchScanProduct()
         {
-            ProductsFilter =await scanService.Scanner();
+            ProductsFilter = await scanService.Scanner();
             SearchProduct();
         }
 

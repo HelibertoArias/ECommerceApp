@@ -80,6 +80,7 @@ namespace ECommerceApp.Services
                     var result = await response.Content.ReadAsStringAsync();
                     var list = JsonConvert.DeserializeObject<List<T>>(result);
 
+                    System.Diagnostics.Debug.WriteLine($"Invocando {controller}");
                     return list;
                 }
 

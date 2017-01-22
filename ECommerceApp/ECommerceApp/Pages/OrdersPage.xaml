@@ -2,11 +2,29 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ECommerceApp.Pages.OrdersPage" 
+             xmlns:control="clr-namespace:ECommerceApp.Controls"
              Title="Pedidos"
              BackgroundColor="{StaticResource BackgroundColor}"
              BindingContext="{Binding Main, Source={StaticResource Locator} }">
-  <Label
-    Text="Orders Page"
-    VerticalOptions="Center"
-    HorizontalOptions="Center" TextColor="{StaticResource FontColor}"/>
+  <StackLayout
+  Padding="8">
+    <SearchBar
+      Placeholder="Buscar..."
+      Text="{Binding OrdersFilter, Mode=TwoWay}"
+      SearchCommand="{Binding SearchOrderCommand}"
+      HorizontalOptions="FillAndExpand"
+      VerticalOptions="Center">
+    </SearchBar>
+    <ListView
+      ItemTemplate="{StaticResource OrderItemTemplate}"
+      ItemsSource="{Binding Orders}"
+      HasUnevenRows="True"
+      IsPullToRefreshEnabled="True"
+      RefreshCommand="{Binding RefreshOrdersCommand}"
+      IsRefreshing="{Binding IsRefreshingOrders, Mode=TwoWay}">
+    </ListView>
+  </StackLayout>
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Icon="ic_action_content_add_circle_outline.png" Command="{Binding NewOrderCommand}"/>
+  </ContentPage.ToolbarItems>
 </ContentPage>

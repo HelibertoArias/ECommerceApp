@@ -29,10 +29,12 @@ namespace ECommerceApp.Data
             connection.CreateTable<Department>();
             connection.CreateTable<Inventory>();
             connection.CreateTable<Order>();
+            connection.CreateTable<OrderDetail>();
             connection.CreateTable<Product>();
             connection.CreateTable<Sale>();
             connection.CreateTable<Tax>();
-            connection.CreateTable<User>();
+            connection.CreateTable<User>(); 
+
             
         }
 

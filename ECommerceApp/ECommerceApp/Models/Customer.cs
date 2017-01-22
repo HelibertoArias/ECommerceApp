@@ -6,7 +6,7 @@ namespace ECommerceApp.Models
 {
     public class Customer
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey]
         public int CustomerId { get; set; }
 
         public string UserName { get; set; }
